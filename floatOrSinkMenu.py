@@ -1,17 +1,10 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'IaFloatORSink.ui'
-#
-# Created by: PyQt5 UI code generator 5.13.0
-#
-# WARNING! All changes made in this file will be lost!
-
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
-
+import sys
 class Ui_MainWindow(object):
+    
     def setupUi(self, MainWindow):
+        
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(352, 204)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -40,16 +33,21 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
+        
 
         #floating pressed
+        self.floatingButton.clicked.connect(floatPressed)
         
-        self.floatingButton.clicked.connect(self.floatingPressed)
 
+        #sinking pressed
+        self.sinkingButton.clicked.connect(self.sinkingPressed)
 
-    def floatingPressed(self):
-        print('press')
-        return True
+        
+    def floatPressed(self):
+        floatPressed()
+    
+    def sinkingPressed(self):
+        print('press sink')
 
 
 
@@ -61,10 +59,16 @@ class Ui_MainWindow(object):
         self.sinkingButton.setText(_translate("MainWindow", "Shrinking"))
         self.label.setText(_translate("MainWindow", "Would you like to run the program for floating or shrinking?"))
 
+
+
+
+
+def floatPressed():
+    import mainRunner
+    print("hi")
+    mainRunner.text()
+    return None
     
-
-
-
 def main():
     import sys
     app = QtWidgets.QApplication(sys.argv)

@@ -2,15 +2,17 @@ import sys
 from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtWidgets import QApplication, QDialog, QDialogButtonBox, QFormLayout, QLabel, QLineEdit, QWidget, QVBoxLayout, QMessageBox
 import floatOrSinkMenu as floatOrSinkMenu
-from floatMainMenu import *
+if __name__  == "__main__":
+    floatOrSinkMenu.main()
 
-floatOrSinkMenu.main()
 running = True
+#fsm = float or sink menu
+def text():
+    print('hello')
+
 while running:
     
-    
-    if floatOrSinkMenu.floatingPressed():
-        print("pressed")
-    
+    print('hi')
+    break
 
 
