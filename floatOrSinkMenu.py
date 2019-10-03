@@ -36,7 +36,7 @@ class Ui_MainWindow(object):
         
 
         #floating pressed
-        self.floatingButton.clicked.connect(floatPressed)
+        self.floatingButton.clicked.connect(self.floatPressed)
         
 
         #sinking pressed
@@ -47,7 +47,7 @@ class Ui_MainWindow(object):
         floatPressed()
     
     def sinkingPressed(self):
-        print('press sink')
+        sinkPressed()
 
 
 
@@ -65,10 +65,13 @@ class Ui_MainWindow(object):
 
 def floatPressed():
     import mainRunner
-    print("hi")
-    mainRunner.text()
-    return None
+    mainRunner.fsmFloatPressed()
     
+def sinkPressed():
+    import mainRunner
+    mainRunner.fsmSinkPressed()
+
+
 def main():
     import sys
     app = QtWidgets.QApplication(sys.argv)

@@ -2,17 +2,34 @@ import sys
 from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtWidgets import QApplication, QDialog, QDialogButtonBox, QFormLayout, QLabel, QLineEdit, QWidget, QVBoxLayout, QMessageBox
 import floatOrSinkMenu as floatOrSinkMenu
-if __name__  == "__main__":
-    floatOrSinkMenu.main()
+import asyncio
+
+
 
 running = True
 #fsm = float or sink menu
-def text():
-    print('hello')
+def fsmFloatPressed():#if float key  
+    return True
+    
+def fsmSinkPressed():
+    return True
+
+
+
+
+
+
+
+
+
+
 
 while running:
+    if __name__  == "__main__":
+        floatOrSinkMenu.main()
     
-    print('hi')
-    break
+    if fsmFloatPressed:
+        print("float")
+    
 
 
