@@ -8,6 +8,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import sys
 
 
 class Ui_MainWindow(object):
@@ -75,11 +76,11 @@ class Ui_MainWindow(object):
         self.label.setText(_translate("MainWindow", "Floating Data"))
 
 
-def run():
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
+#def run():
+
+app = QtWidgets.QApplication(sys.argv)
+MainWindow = QtWidgets.QMainWindow()
+ui = Ui_MainWindow()
+ui.setupUi(MainWindow)
+
+

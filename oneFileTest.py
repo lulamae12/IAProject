@@ -41,10 +41,10 @@ class floatOrSinkMenu(object):
 
         #sinking pressed
         self.sinkingButton.clicked.connect(self.sinkingPressed)
-
+    
     def floatPressed(self):
-        floatPressed()
-        pass
+        #call run class and run flmm section
+        runClass("floatMainMenu")
 
     def sinkingPressed(self):
         #sinkPressed()
@@ -124,30 +124,18 @@ class floatMainMenu(object):
         self.label.setText(_translate("MainWindow", "Floating Data"))
 
 
-
-def setupWindow(name): #createwindow shortener
-    ui = eval(name)()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-
-
-
-while True:
+def runClass(name):
+    MainWindow.close
+    className = eval(name)()
+    className.setupUi(MainWindow)
+    MainWindow.show
 
 
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    setupWindow("floatOrSinkMenu")
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    sys.exit(app.exec_())
+
+
+app = QtWidgets.QApplication(sys.argv)
+MainWindow = QtWidgets.QMainWindow()
+fsm = floatOrSinkMenu()
+fsm.setupUi(MainWindow)
+MainWindow.show()
+sys.exit(app.exec_())

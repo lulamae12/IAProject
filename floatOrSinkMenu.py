@@ -1,6 +1,9 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
+
+quitProgram = False
+
 class Ui_MainWindow(object):
     
     def setupUi(self, MainWindow):
@@ -54,7 +57,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Float or Sink"))
         self.floatingButton.setText(_translate("MainWindow", "Floating"))
         self.sinkingButton.setText(_translate("MainWindow", "Shrinking"))
         self.label.setText(_translate("MainWindow", "Would you like to run the program for floating or shrinking?"))
@@ -67,9 +70,13 @@ def floatPressed():
     import mainRunner
     mainRunner.fsmFloatPressed()
     
+    
+#sdef destroyWindows(): 
+
 def sinkPressed():
     import mainRunner
     mainRunner.fsmSinkPressed()
+
 
 
 def main():
@@ -79,4 +86,6 @@ def main():
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
+    
     sys.exit(app.exec_())
+    MainWindow.hide()
