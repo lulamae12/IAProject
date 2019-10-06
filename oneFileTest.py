@@ -42,6 +42,9 @@ class floatOrSinkMenu(object):
         #sinking pressed
         self.sinkingButton.clicked.connect(self.sinkingPressed)
     
+    
+    
+    @staticmethod#static binds the function just to float menu and not to the window
     def floatPressed(self):
         #call run class and run flmm section
         runClass("floatMainMenu")
@@ -118,14 +121,9 @@ class floatMainMenu(object):
 
 
         self.quitToSelectButton.clicked.connect(self.backButtonPressed)
-
+    @staticmethod
     def backButtonPressed(self):
-        MainWindow.close
-        print('ran')
         runClass("floatOrSinkMenu")
-        print('ran')
-        MainWindow.show
-
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Float Data - Main Menu"))
@@ -137,14 +135,11 @@ class floatMainMenu(object):
         self.addNewDPandGraphButton.setText(_translate("MainWindow", "Add New Data Point and Graph"))
         self.label.setText(_translate("MainWindow", "Floating Data"))
 
-
 def runClass(name):
-    
+    #must calll as a static method
     MainWindow.close
-    print("1")
     className = eval(name)()
     className.setupUi(MainWindow)
-    print("2")
     MainWindow.show
 
 
