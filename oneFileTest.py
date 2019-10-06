@@ -44,7 +44,7 @@ class floatOrSinkMenu(object):
     
     
     
-    @staticmethod#static binds the function just to float menu and not to the window
+    @staticmethod#static binds the function just to object, in this case window, instead of float pressed
     def floatPressed(self):
         #call run class and run flmm section
         runClass("floatMainMenu")
