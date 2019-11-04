@@ -151,7 +151,7 @@ class fmmAddDP(object):
         self.currentDateCBChecked = True
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(331, 377)
+        MainWindow.resize(341, 377)
         font = QtGui.QFont()
         font.setPointSize(12)
         MainWindow.setFont(font)
@@ -159,7 +159,7 @@ class fmmAddDP(object):
         self.centralwidget.setObjectName("centralwidget")
         self.sinkingWeightTextBox = QtWidgets.QTextEdit(self.centralwidget)
         self.sinkingWeightTextBox.setEnabled(True)
-        self.sinkingWeightTextBox.setGeometry(QtCore.QRect(220, 70, 81, 21))
+        self.sinkingWeightTextBox.setGeometry(QtCore.QRect(220, 70, 111, 21))
         self.sinkingWeightTextBox.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.sinkingWeightTextBox.setObjectName("sinkingWeightTextBox")
         self.label = QtWidgets.QLabel(self.centralwidget)
@@ -173,7 +173,7 @@ class fmmAddDP(object):
         self.label_2.setObjectName("label_2")
         self.floatingWeightTextBox = QtWidgets.QTextEdit(self.centralwidget)
         self.floatingWeightTextBox.setEnabled(True)
-        self.floatingWeightTextBox.setGeometry(QtCore.QRect(220, 100, 81, 21))
+        self.floatingWeightTextBox.setGeometry(QtCore.QRect(220, 100, 111, 21))
         self.floatingWeightTextBox.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.floatingWeightTextBox.setObjectName("floatingWeightTextBox")
         self.useCurrentDatecheckBox = QtWidgets.QCheckBox(self.centralwidget)
@@ -185,7 +185,7 @@ class fmmAddDP(object):
         self.label_3.setObjectName("label_3")
         self.dateTextBox = QtWidgets.QTextEdit(self.centralwidget)
         self.dateTextBox.setEnabled(True)
-        self.dateTextBox.setGeometry(QtCore.QRect(220, 130, 81, 21))
+        self.dateTextBox.setGeometry(QtCore.QRect(220, 130, 111, 21))
         self.dateTextBox.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.dateTextBox.setObjectName("dateTextBox")
         #get date and disable date box
@@ -238,7 +238,7 @@ class fmmAddDP(object):
         
         self.useCurrentDatecheckBox.stateChanged.connect(lambda:self.dateCBEval(self.useCurrentDatecheckBox))#lambda fycbiton call checkbox eval
 
-        #self.addPoint.clicked.connect(self.addPoint)
+        self.pushButton.clicked.connect(self.addPoint)
     
     
     def dateCBEval(self,checkbox):#toggle text box
@@ -249,7 +249,21 @@ class fmmAddDP(object):
         
 
     def addPoint(self):
-        print(self.dateTextBox.text())
+        
+        
+        if self.useCurrentDatecheckBox.isChecked():
+            dateString = str(self.currentDateFormatted())
+        else:
+            dateString = self.dateTextBox.toPlainText()
+        sinkWeightString = self.sinkingWeightTextBox.toPlainText()
+        floatWeightString = self.floatingWeightTextBox.toPlainText()
+
+
+
+        print(dateString)
+        print(sinkWeightString)
+        print(floatWeightString)
+        print("hi")
 
 
 
@@ -264,7 +278,7 @@ class fmmAddDP(object):
         self.label_3.setText(_translate("MainWindow", "Date ( MM/DD/YYYY) :"))
         
         self.pushButton.setText(_translate("MainWindow", "Add another data point"))
-        self.pushButton_2.setText(_translate("MainWindow", "Add data point and Veiw Graph"))
+        self.pushButton_2.setText(_translate("MainWindow", "Veiw Graph"))
         self.label_4.setText(_translate("MainWindow", "Add Float Data point"))
         self.quitToMenuButton.setText(_translate("MainWindow", "Save and quit to menu"))
     
