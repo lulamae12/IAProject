@@ -256,7 +256,8 @@ class fmmAddDP(object):
         
 
     def addPoint(self):
-        
+        sinkWeightFloat = ""
+        floatWeightFloat = ""
         
         if self.useCurrentDatecheckBox.isChecked():
             dateString = str(self.currentDateFormatted())
@@ -267,11 +268,6 @@ class fmmAddDP(object):
 
         sinkErrorIn = False
         floatErrorIn = False
-
-        print(dateString)
-        print(sinkWeightString)
-        print(floatWeightString)
-
         try:
             sinkWeightFloat = float(sinkWeightString)
         except ValueError:
@@ -286,6 +282,9 @@ class fmmAddDP(object):
         if floatErrorIn != True or sinkErrorIn != True:
             return None
 
+        print(dateString)
+        print(sinkWeightFloat)
+        print(floatWeightFloat)
 
 
 
