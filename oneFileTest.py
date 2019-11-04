@@ -1,6 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys,datetime
-
+from PyQt5.QtWidgets import QMessageBox
 
 
 
@@ -240,7 +240,14 @@ class fmmAddDP(object):
 
         self.pushButton.clicked.connect(self.addPoint)
     
-    
+    def createErrorMessage(self,title,message):
+        errorMsg = QMessageBox()
+        errorMsg.setIcon(QMessageBox.Critical)
+        errorMsg.setText(title)
+        errorMsg.setInformativeText(message)
+        errorMsg.setWindowTitle(title)
+        errorMsg.exec()
+
     def dateCBEval(self,checkbox):#toggle text box
         if checkbox.isChecked() == True:
             self.dateTextBox.setDisabled(True)
@@ -258,12 +265,32 @@ class fmmAddDP(object):
         sinkWeightString = self.sinkingWeightTextBox.toPlainText()
         floatWeightString = self.floatingWeightTextBox.toPlainText()
 
-
+        sinkErrorIn = False
+        floatErrorIn = False
 
         print(dateString)
         print(sinkWeightString)
         print(floatWeightString)
-        print("hi")
+
+        try:
+            sinkWeightFloat = float(sinkWeightString)
+        except ValueError:
+            self.createErrorMessage("Error!","Input for Sink Weight is Invalid!")
+            sinkErrorIn = True
+        try:
+            floatWeightFloat = float(floatWeightString)
+        except ValueError:
+            self.createErrorMessage("Error!","Input for Float Weight is Invalid!")
+            floatErrorIn = True
+
+        if floatErrorIn != True or sinkErrorIn != True:
+            return None
+
+
+
+
+
+        
 
 
 
