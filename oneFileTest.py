@@ -279,15 +279,34 @@ class fmmAddDP(object):
             self.createErrorMessage("Error!","Input for Float Weight is Invalid!")
             floatErrorIn = True
 
-        if floatErrorIn != True or sinkErrorIn != True:
+        if floatErrorIn != False or sinkErrorIn != False:
+            print(floatErrorIn)
+            print(sinkErrorIn)
             return None
 
         print(dateString)
         print(sinkWeightFloat)
         print(floatWeightFloat)
+        jsonData = []
+        self.makeJsonData(dateString,sinkWeightFloat,floatWeightFloat)
 
 
+    def makeJsonData(self,date,sinkWeight,floatWeight):
+        
+        
+        data = {
+            "Entry":[
+                {
+                    "date":date,
+                    "sink":sinkWeight,
+                    "float":floatWeight
+                }
+            ]
+        }
+        print(data)
 
+    #def saveToJson(self):
+         
 
         
 
