@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-import sys,datetime
+import sys,datetime,json
 from PyQt5.QtWidgets import QMessageBox
 
 
@@ -59,7 +59,7 @@ class floatOrSinkMenu(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindsow"))
         self.floatingButton.setText(_translate("MainWindow", "Floating"))
         self.sinkingButton.setText(_translate("MainWindow", "Shrinking"))
         self.label.setText(_translate("MainWindow", "Would you like to run the program for floating or shrinking?"))
@@ -239,7 +239,15 @@ class fmmAddDP(object):
         self.useCurrentDatecheckBox.stateChanged.connect(lambda:self.dateCBEval(self.useCurrentDatecheckBox))#lambda fycbiton call checkbox eval
 
         self.pushButton.clicked.connect(self.addPoint)
+
+        self.quitToMenuButton.clicked.connect(self.backButtonPressed)
+
+    #go back to flaot main menu
+    @staticmethod
+    def backButtonPressed(self):
+        runClass("floatMainMenu")
     
+    #create error message based on input
     def createErrorMessage(self,title,message):
         errorMsg = QMessageBox()
         errorMsg.setIcon(QMessageBox.Critical)
@@ -287,25 +295,24 @@ class fmmAddDP(object):
         print(dateString)
         print(sinkWeightFloat)
         print(floatWeightFloat)
-        jsonData = []
-        self.makeJsonData(dateString,sinkWeightFloat,floatWeightFloat)
-
-
+        
+        
+        data = self.makeJsonData(dateString,sinkWeightFloat,floatWeightFloat)
+        self.saveToJson(data)
+    
+    #format data to json dict
     def makeJsonData(self,date,sinkWeight,floatWeight):
         
-        
-        data = {
-            "Entry":[
-                {
-                    "date":date,
-                    "sink":sinkWeight,
-                    "float":floatWeight
-                }
-            ]
-        }
+        data = {"date":date,"sink":sinkWeight,"float":floatWeight}
+            
         print(data)
+        return data
+    #save data
+    def saveToJson(self,data):
+        with open('floatData.txt', 'a') as file:
+            json.dump(data, file)
+            file.write("\n")
 
-    #def saveToJson(self):
          
 
         
@@ -322,10 +329,10 @@ class fmmAddDP(object):
         self.useCurrentDatecheckBox.setText(_translate("MainWindow", "use Current Date : "))
         self.label_3.setText(_translate("MainWindow", "Date ( MM/DD/YYYY) :"))
         
-        self.pushButton.setText(_translate("MainWindow", "Add another data point"))
+        self.pushButton.setText(_translate("MainWindow", "Add data point"))
         self.pushButton_2.setText(_translate("MainWindow", "Veiw Graph"))
         self.label_4.setText(_translate("MainWindow", "Add Float Data point"))
-        self.quitToMenuButton.setText(_translate("MainWindow", "Save and quit to menu"))
+        self.quitToMenuButton.setText(_translate("MainWindow", "Return to menu"))
     
     def currentDateFormatted(self):
         currentDate = datetime.date.today()
@@ -345,7 +352,7 @@ class fmmAddDP(object):
 
 
 
-
+#class called to call another class. hows that for an alitteration?
 def runClass(name):
     #must calll as a static method
     MainWindow.close
