@@ -65,7 +65,7 @@ sinkPercent(totalWeights,sinkingWeights)
 
 ###########################################################################
 
-def average(floatPercents):# return average of list
+def findAverage(floatPercents):# return average of list
     itemCount =  len(floatPercents)
     total = 0
     for percentage in floatPercents:
@@ -113,7 +113,7 @@ def UCL(average,std,sigmas,roundTo100):#calc upper control sigmas is test. round
 
 #def LCL(average,std):#calc lower control sigmas is test
 def updateControls(uclTarget,roundTo100):
-    averageN = average(floatPercents)
+    averageN = findAverage(floatPercents)
     std = standardDeviation(floatPercents)
     ucl,lcl,sigmas = findControlLimits(averageN,std,uclTarget,roundTo100)
 
@@ -126,15 +126,20 @@ def updateControls(uclTarget,roundTo100):
 
 
 
-def callGraph(sigmas,ucl,lcl,average,floatPercents,sinkPercents,dates):
-    graphFloat.getValues(sigmas,ucl,lcl,average,floatPercents,sinkPercents,dates)
+def callGraphs(sigmas,ucl,lcl,average,floatPercents,sinkPercents,dates):
+    graphFloat.plotGraphs(sigmas,ucl,lcl,average,floatPercents,sinkPercents,dates)
 
 
-average(floatPercents)
+
+
+average = findAverage(floatPercents)
 standardDeviation(floatPercents)
 
 
 print("\n")
 
 sigmas,ucl,lcl = updateControls(100,True)
-callGraph(3,ucl,lcl,average,floatPercents,sinkPercents,dates)
+floatGraphs = graphFloat.FloatGraphs(3,ucl,lcl,average,floatPercents,sinkPercents,dates)
+
+
+floatGraphs.lineGraph()
