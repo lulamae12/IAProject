@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as np
 from matplotlib.widgets import Button
+import matplotlib.patches as patches
 class FloatGraphs(object):
 
 
@@ -9,6 +10,8 @@ class FloatGraphs(object):
         self.sigmas = sigmas
         self.ucl = ucl  
         self.lcl = lcl
+        self.lineRunning = True
+        self.barRunning = False
         avg = average
         self.average = avg
         self.floatPercents = floatPercents
@@ -38,17 +41,19 @@ class FloatGraphs(object):
 
         return lowerYLim,upperYLim
     
-    
-    @staticmethod
-    def test(self):
-        
-        print("test")
     def lineGraph(self):
         y = np.array(self.floatPercents,float)
         x = np.array(self.dates)
-        print(x)
-        plt.xlabel("Dates")
+        xRange = len(x)
+        print(xRange)
         
+        
+        print(x)
+        plt.xlabel("Date")
+        plt.ylabel("Percentage")
+        
+
+
         #setup graph limits
         yLimLow,yLimHigh = self.returnYLims(self.ucl,self.lcl,self.floatPercentsMin,self.floatPercentsMax)
         plt.ylim(yLimLow - 1,yLimHigh + 1)
@@ -56,7 +61,6 @@ class FloatGraphs(object):
         #create lcl and ucl lines
         print("lcl: ",self.lcl)
         plt.axhline(self.lcl, color='r', linestyle='-')#plot lcl line
-        
         print("ucl: ",self.ucl)
         plt.axhline(self.ucl, color='g', linestyle='-')#plot lcl line
         
@@ -66,30 +70,46 @@ class FloatGraphs(object):
         plt.axhline(self.average, color='y', linestyle='--')#plot lcl line
 
 
+        
 
 
+        # rotate and align the tick labels so they look better
+        plt.gcf().autofmt_xdate()
 
         li = plt.plot(self.dates,y, linestyle='-', marker='o', color='b')
         
         xVals = li[0].get_xdata()
         yVals = li[0].get_ydata()
+
+        uclPatch = patches.Patch(color="green",label="Upper Control Limit : " + str(self.ucl) )
+        lclPatch = patches.Patch(color="red",label="Lower Control Limit : " + str(round(self.lcl,2)) )
+        avgPatch = patches.Patch(color = "yellow",label="Average: "+str(round(self.average,2)))
+        floatPatch = patches.Patch(color = "blue",label="Floating Percentage")
+
+        plt.legend(bbox_to_anchor=(0., .9, 1., .102), loc='lower left',ncol=2,handles=[uclPatch,avgPatch,lclPatch,floatPatch],framealpha=1, mode="expand",title="Floating Graph", borderaxespad=0.9)
+        #plt.legend(bbox_to_anchor=(1,0.5), loc='center right',handles=[uclPatch,avgPatch,lclPatch])
         
+       
+       
+
+
+        #label points 
         for i in range(len(self.floatPercents)):
             plt.annotate(str(yVals[i]),(xVals[i],yVals[i]),textcoords="offset points",xytext=(0,10))
-        print(type(self.average))
+       
 
 
+        
+        plt.grid(True,which="both",axis="both")
 
 
-
-
-
-
-        nextGraph = plt.axes([0.81, 0.01, 0.15, 0.05])#ButtonPosition
-        bnext = Button(nextGraph, 'Next Graph')#Button
-        bnext.on_clicked(self.test)#ButtonCallbackset
+ 
+       
+        
+       
         
         plt.show()
+        
         
     #def next(self,event):
 
