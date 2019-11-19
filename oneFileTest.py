@@ -64,6 +64,8 @@ class floatOrSinkMenu(object):
         self.sinkingButton.setText(_translate("MainWindow", "Shrinking"))
         self.label.setText(_translate("MainWindow", "Would you like to run the program for floating or shrinking?"))
 
+class floatChooseGraphType(object):
+
 
 
 class floatMainMenu(object):
@@ -330,7 +332,7 @@ class fmmAddDP(object):
         self.label_3.setText(_translate("MainWindow", "Date ( MM/DD/YYYY) :"))
         
         self.pushButton.setText(_translate("MainWindow", "Add data point"))
-        self.pushButton_2.setText(_translate("MainWindow", "Veiw Graph"))
+        self.pushButton_2.setText(_translate("MainWindow", "Veiw Graphs"))
         self.label_4.setText(_translate("MainWindow", "Add Float Data point"))
         self.quitToMenuButton.setText(_translate("MainWindow", "Return to menu"))
     

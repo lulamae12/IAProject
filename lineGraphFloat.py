@@ -86,7 +86,7 @@ class FloatGraphs(object):
         avgPatch = patches.Patch(color = "yellow",label="Average: "+str(round(self.average,2)))
         floatPatch = patches.Patch(color = "blue",label="Floating Percentage")
 
-        plt.legend(bbox_to_anchor=(0., .9, 1., .102), loc='lower left',ncol=2,handles=[uclPatch,avgPatch,lclPatch,floatPatch],framealpha=1, mode="expand",title="Floating Graph", borderaxespad=0.9)
+        plt.legend(bbox_to_anchor=(0., 1, 1., .102), loc='lower left',ncol=2,handles=[uclPatch,avgPatch,lclPatch,floatPatch],framealpha=1, mode="expand",title="Floating Graph", borderaxespad=0.9)
         #plt.legend(bbox_to_anchor=(1,0.5), loc='center right',handles=[uclPatch,avgPatch,lclPatch])
         
        

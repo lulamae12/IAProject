@@ -1,6 +1,6 @@
 import pandas,numpy
 from statistics import stdev
-import graphFloat
+import lineGraphFloat
 #Things i need to calculate:
 # percent floating
 # percent sinking
@@ -126,7 +126,7 @@ def updateControls(uclTarget,roundTo100):
 
 
 
-def callGraphs(sigmas,ucl,lcl,average,floatPercents,sinkPercents,dates):
+def callLineGraphs(sigmas,ucl,lcl,average,floatPercents,sinkPercents,dates):
     graphFloat.plotGraphs(sigmas,ucl,lcl,average,floatPercents,sinkPercents,dates)
 
 
@@ -139,7 +139,7 @@ standardDeviation(floatPercents)
 print("\n")
 
 sigmas,ucl,lcl = updateControls(100,True)
-floatGraphs = graphFloat.FloatGraphs(3,ucl,lcl,average,floatPercents,sinkPercents,dates)
+floatGraphs = lineGraphFloat.FloatGraphs(3,ucl,lcl,average,floatPercents,sinkPercents,dates)
 
 
 floatGraphs.lineGraph()
