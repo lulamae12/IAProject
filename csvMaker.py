@@ -37,7 +37,7 @@ def getDataSet(fileName):
 
 
     dataSetFile.close()
-    
+    print("dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: ",data)
     return data
 
 
@@ -52,7 +52,18 @@ def createCSVFile(mode,dataList):
             dates.append(chunk[0])
             sinkingValues.append(chunk[1])
             floatingValues.append(chunk[2])
-        
+        print("-----------------------------------------\n")
+
+        print("DATES: ",dates)
+        print("Sinking vals: ",sinkingValues)
+        print("FLoating vals: ",floatingValues)
+
+        print(len(dates))
+        print(len(sinkingValues))
+        print(len(floatingValues))
+
+
+        print("\n-----------------------------------------")
         with open("floating_data.csv","w+", newline='') as csvFile:
             csvWriter = csv.writer(csvFile,delimiter=",")
             #swriter.writeheader()
@@ -71,10 +82,10 @@ def readCsv(fileName):
 
 
 
-
-dataSet = getDataSet("floatData.txt")
-createCSVFile(0,dataSet)
-
-readCsv("floating_data.csv")
+def create(filename):
+    dataSet = getDataSet(filename)
+    createCSVFile(0,dataSet)
+    
+    #readCsv("floating_data.csv")
 
 #def calculateAverage():

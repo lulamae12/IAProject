@@ -19,6 +19,7 @@ class FloatGraphs(object):
         self.dates = dates
         self.floatPercentsMin = self.listMin(floatPercents)
         self.floatPercentsMax = self.listMax(floatPercents)
+        self.lineGraph()
     def listMin(self,list):
         print(min(list))
         return min(list)
@@ -42,6 +43,8 @@ class FloatGraphs(object):
         return lowerYLim,upperYLim
     
     def lineGraph(self):
+        print("self float percents: ",self.floatPercents)
+        print("self float percents len : ",len(self.floatPercents))
         y = np.array(self.floatPercents,float)
         x = np.array(self.dates)
         xRange = len(x)
@@ -75,7 +78,8 @@ class FloatGraphs(object):
 
         # rotate and align the tick labels so they look better
         plt.gcf().autofmt_xdate()
-
+        print(self.dates,len(self.dates))
+        print(y,len(y))
         li = plt.plot(self.dates,y, linestyle='-', marker='o', color='b')
         
         xVals = li[0].get_xdata()

@@ -1,4 +1,4 @@
-import pandas,numpy
+import pandas,numpy,sys
 from statistics import stdev
 import lineGraphFloat
 #Things i need to calculate:
@@ -17,50 +17,65 @@ sinkingWeights = []
 totalWeights = []
 floatPercents = []
 sinkPercents = []
+dataSet = []
+
+
 
 def getDataFrame(fileName):
+    global dataSet
+    del dataSet[:]
     df = pandas.read_csv(fileName)
     print(df)
     dataset = df.values.tolist()
+    for item in dataset:
+        dataSet.append(item)
+    print(dataset)
+    
     return dataset
 
-def getDates(dataset):
-    for items in dataset:
+def getDates():
+    global dates
+    print("dates: ",dates)
+    
+    del dates[:]
+    print("dataset: ",dataSet)
+    print("dates after del: ",dates)
+    for items in dataSet:
         #print(items[0])
+        
+        
         dates.append(items[0])
+    print("dates: ", dates)
 
-def getFloatWeight(dataset):
-    for items in dataset:
+def getFloatWeight():
+    del floatingWeights[:]
+    for items in dataSet:
         #print(items[1])
         floatingWeights.append(items[2])
 
-def getSinkWeight(dataset):
-    for items in dataset:
+def getSinkWeight():
+    del sinkingWeights[:]
+    for items in dataSet:
         #print(items[2])
         sinkingWeights.append(items[1])
 
 def totalWeight(sinkL,floatL): #get total weight of sink weight and float weight and add to list
+    del totalWeights[:]
     for i in range(len(sinkL)):
         totalWeightItem = sinkL[i] + floatL[i]
         totalWeights.append(totalWeightItem) 
 def floatPercent(totalL,floatL):
+    
+    del floatPercents[:]
     for i in range(len(floatL)):
         floatPercent = round((floatL[i] / totalL[i]) * 100,1)
         floatPercents.append(floatPercent)
+        
 def sinkPercent(totalL,sinkL):
+    del sinkPercents[:]
     for i in range(len(sinkL)):
         sinkPercent = round((sinkL[i] / totalL[i]) * 100,1)
         sinkPercents.append(sinkPercent)
-    
-
-
-dataSet= getDataFrame("floating_data.csv")
-getDates(dataSet)
-getSinkWeight(dataSet)
-getFloatWeight(dataSet)
-totalWeight(sinkingWeights,floatingWeights)
-floatPercent(totalWeights,floatingWeights)
-sinkPercent(totalWeights,sinkingWeights)
 
 
 ###########################################################################
@@ -132,14 +147,28 @@ def callLineGraphs(sigmas,ucl,lcl,average,floatPercents,sinkPercents,dates):
 
 
 
-average = findAverage(floatPercents)
-standardDeviation(floatPercents)
+#average = findAverage(floatPercents)
+#standardDeviation(floatPercents)
 
 
 print("\n")
 
-sigmas,ucl,lcl = updateControls(100,True)
-floatGraphs = lineGraphFloat.FloatGraphs(3,ucl,lcl,average,floatPercents,sinkPercents,dates)
+#ssigmas,ucl,lcl = updateControls(100,True)
+#floatGraphs = lineGraphFloat.FloatGraphs(3,ucl,lcl,average,floatPercents,sinkPercents,dates)
 
-
-floatGraphs.lineGraph()
+def call():
+    dataSet = getDataFrame("floating_data.csv")
+    getDates()
+    getSinkWeight()
+    getFloatWeight()
+    totalWeight(sinkingWeights,floatingWeights)
+    floatPercent(totalWeights,floatingWeights)
+    sinkPercent(totalWeights,sinkingWeights)
+    
+    average = findAverage(floatPercents)
+    
+    sigmas,ucl,lcl = updateControls(100,True)
+    
+    floatGraphs = lineGraphFloat.FloatGraphs(3,ucl,lcl,average,floatPercents,sinkPercents,dates)
+    #floatGraphs.lineGraph()
+#dataSet = getDataFrame("floating_data.csv")
