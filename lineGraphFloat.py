@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as np
+from datetime import datetime
 from matplotlib.widgets import Button
 import matplotlib.patches as patches
 class FloatGraphs(object):
@@ -80,6 +81,10 @@ class FloatGraphs(object):
         plt.gcf().autofmt_xdate()
         print(self.dates,len(self.dates))
         print(y,len(y))
+        
+        self.dates.sort(key=lambda date: datetime.strptime(date, "%m/%d/%Y"))
+       
+
         li = plt.plot(self.dates,y, linestyle='-', marker='o', color='b')
         
         xVals = li[0].get_xdata()
