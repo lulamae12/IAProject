@@ -2,8 +2,9 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as np
 from datetime import datetime
-from matplotlib.widgets import Button
+from matplotlib.widgets import Button,Slider
 import matplotlib.patches as patches
+
 class FloatGraphs(object):
 
 
@@ -51,7 +52,12 @@ class FloatGraphs(object):
         xRange = len(x)
         print(xRange)
         
+
+        fig, ax = plt.subplots()
+        plt.subplots_adjust(bottom=0.25)#create as subplot for better integration of sldier
         
+
+
         print(x)
         plt.xlabel("Date")
         plt.ylabel("Percentage")
@@ -110,6 +116,21 @@ class FloatGraphs(object):
 
         
         plt.grid(True,which="both",axis="both")
+
+        #under is for slider subplot
+        #create slider widget
+        axpos = plt.axes([0.2, 0.01, 0.65, 0.03])
+        positionSlider = Slider(axpos, 'Position: ', -1, len(self.dates),valfmt="%1.0f",dragging=True,valstep=None)
+
+        def updatePosition(val):#update slider position and change axis veiw
+            pos = positionSlider.val
+            ax.axis([pos,pos+10,yLimLow - 1,yLimHigh + 1])
+            fig.canvas.draw_idle()
+        
+
+        
+
+        positionSlider.on_changed(updatePosition)#call on changed
 
 
  
