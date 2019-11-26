@@ -2,6 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import sys,datetime,json
 from PyQt5.QtWidgets import QMessageBox
 import sixSigmaCalcFloatLine as SSCFL
+import sixSigmaCalcFloatBar as SSCFB
 import csvMaker as csvMaker
 
 
@@ -141,6 +142,7 @@ class floatChooseGraphType(object):
         self.returnToFloatMenuButton.clicked.connect(self.backButtonPressed)
         
         self.veiwLineGraphFloatButton.clicked.connect(self.veiwLineGraphPressed)
+        self.veiwBarGraphFloatButton.clicked.connect(self.veiwBarGraphPressed)
 
     #go back to add data point menu
     @staticmethod
@@ -151,8 +153,14 @@ class floatChooseGraphType(object):
     @staticmethod
     def veiwLineGraphPressed(self):
         csvMaker.create("floatData.txt")
-        SSCFL.call()#six sigma calc flaot line graph    
+        SSCFL.call()#six sigma calc float line graph    
 
+    #veiw BarGraph
+    @staticmethod
+    def veiwBarGraphPressed(self):
+        print("hi")
+        csvMaker.create("floatData.txt")
+        SSCFB.call()#six sigma calc float bar graph    
 
 
 
@@ -175,27 +183,27 @@ class floatChooseGraphType(object):
 class floatMainMenu(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(417, 342)
+        MainWindow.resize(294, 283)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.viewGraphButton = QtWidgets.QPushButton(self.centralwidget)
-        self.viewGraphButton.setGeometry(QtCore.QRect(80, 200, 260, 31))
+        self.viewGraphButton.setGeometry(QtCore.QRect(20, 110, 260, 31))
         self.viewGraphButton.setObjectName("viewGraphButton")
         
         self.settingsButton = QtWidgets.QPushButton(self.centralwidget)
-        self.settingsButton.setGeometry(QtCore.QRect(80, 280, 131, 31))
+        self.settingsButton.setGeometry(QtCore.QRect(20, 190, 260, 31))
         self.settingsButton.setObjectName("settingsButton")
         self.quitToSelectButton = QtWidgets.QPushButton(self.centralwidget)
-        self.quitToSelectButton.setGeometry(QtCore.QRect(210, 280, 131, 31))
+        self.quitToSelectButton.setGeometry(QtCore.QRect(150, 230, 131, 31))
         self.quitToSelectButton.setObjectName("quitToSelectButton")
         self.editDataPointButton = QtWidgets.QPushButton(self.centralwidget)
-        self.editDataPointButton.setGeometry(QtCore.QRect(80, 240, 260, 31))
+        self.editDataPointButton.setGeometry(QtCore.QRect(20, 150, 260, 31))
         self.editDataPointButton.setObjectName("editDataPointButton")
         self.addNewDPandGraphButton = QtWidgets.QPushButton(self.centralwidget)
-        self.addNewDPandGraphButton.setGeometry(QtCore.QRect(80, 160, 260, 31))
+        self.addNewDPandGraphButton.setGeometry(QtCore.QRect(20, 70, 260, 31))
         self.addNewDPandGraphButton.setObjectName("addNewDPandGraphButton")
         self.line = QtWidgets.QFrame(self.centralwidget)
-        self.line.setGeometry(QtCore.QRect(80, 120, 260, 31))
+        self.line.setGeometry(QtCore.QRect(20, 40, 260, 31))
         font = QtGui.QFont()
         font.setBold(False)
         font.setWeight(50)
@@ -206,14 +214,17 @@ class floatMainMenu(object):
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
         self.line.setObjectName("line")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(150, 100, 121, 31))
+        self.label.setGeometry(QtCore.QRect(90, 20, 121, 31))
         font = QtGui.QFont()
         font.setPointSize(15)
         self.label.setFont(font)
         self.label.setObjectName("label")
+        self.helpMenuButton = QtWidgets.QPushButton(self.centralwidget)
+        self.helpMenuButton.setGeometry(QtCore.QRect(20, 230, 128, 31))
+        self.helpMenuButton.setObjectName("helpMenuButton")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 417, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 294, 21))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -251,7 +262,7 @@ class floatMainMenu(object):
         self.editDataPointButton.setText(_translate("MainWindow", "view And Edit Data Points"))
         self.addNewDPandGraphButton.setText(_translate("MainWindow", "Add New Data Point"))
         self.label.setText(_translate("MainWindow", "Floating Data"))
-
+        self.helpMenuButton.setText(_translate("MainWindow", "Help Menu"))
 
 
 class fmmAddDP(object):

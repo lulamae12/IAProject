@@ -51,7 +51,7 @@ class FloatBarGraph(object):
         p1 = plt.bar(indentation,self.floatPercents,width)
         p2 = plt.bar(indentation,self.sinkPercents,width,bottom=self.floatPercents)
         
-        
+        self.labelBars(p1,True)
         self.labelBars(p2,False)
         
 
@@ -62,11 +62,11 @@ class FloatBarGraph(object):
         plt.ylim(0,105)
         
         
-        floatPercentPatch = patches.Patch(color="blue",label="Percent Floating")
-        sinkPercentPatch = patches.Patch(color="orange",label="Percent Sinking")
+        floatPercentPatch = patches.Patch(color="blue",label="Floating (%)")
+        sinkPercentPatch = patches.Patch(color="orange",label="Sinking (%)")
 
-        
-        plt.legend(bbox_to_anchor=(0, 1.09, 1.0, .102),loc="upper left",handles=[floatPercentPatch,sinkPercentPatch])
+        plt.title("Float Sample Distribution")
+        plt.legend(bbox_to_anchor=(0.018, 1.09, 1.0, .102),loc="upper right",handles=[floatPercentPatch,sinkPercentPatch])
         
 
         #under is for slider subplot

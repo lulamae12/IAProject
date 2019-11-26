@@ -53,10 +53,10 @@ class FloatGraphs(object):
         print(xRange)
         
 
-        fig, ax = plt.subplots()
+        fig, ax = plt.subplots(figsize=(7,6.6))
         plt.subplots_adjust(bottom=0.25)#create as subplot for better integration of sldier
         
-
+        
 
         print(x)
         plt.xlabel("Date")
@@ -80,7 +80,7 @@ class FloatGraphs(object):
         plt.axhline(self.average, color='y', linestyle='--')#plot lcl line
 
 
-        
+        plt.xlim(-1,7)
 
 
         # rotate and align the tick labels so they look better
@@ -101,7 +101,7 @@ class FloatGraphs(object):
         avgPatch = patches.Patch(color = "yellow",label="Average: "+str(round(self.average,2)))
         floatPatch = patches.Patch(color = "blue",label="Floating Percentage")
 
-        plt.legend(bbox_to_anchor=(0., 1, 1., .102), loc='lower left',ncol=2,handles=[uclPatch,avgPatch,lclPatch,floatPatch],framealpha=1, mode="expand",title="Floating Graph", borderaxespad=0.9)
+        plt.legend(bbox_to_anchor=(0., 1, 1., .10), loc='lower left',ncol=2,handles=[uclPatch,avgPatch,lclPatch,floatPatch],framealpha=1, mode="expand",title="Floating Graph", borderaxespad=0.9)
         #plt.legend(bbox_to_anchor=(1,0.5), loc='center right',handles=[uclPatch,avgPatch,lclPatch])
         
        

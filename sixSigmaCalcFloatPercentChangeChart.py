@@ -1,7 +1,7 @@
 import pandas,numpy,sys
 from statistics import stdev
-import barGraphFloat
-#bar graph float data calc
+import percentChangeGraphFloat
+
 #################################################################################
 #init
 #################################################################################
@@ -29,18 +29,14 @@ def getDataFrame(fileName):
 
 def getDates():
     global dates
-    print("dates: ",dates)
     
     del dates[:]
-    print("dataset: ",dataSet)
-    print("dates after del: ",dates)
     for items in dataSet:
-        #print(items[0])
+        
         
         
         dates.append(items[0])
-    print("dates: ", dates)
-
+    
 def getFloatWeight():
     del floatingWeights[:]
     for items in dataSet:
@@ -74,18 +70,59 @@ def sinkPercent(totalL,sinkL):
 
 ###########################################################################
 
-def callLineGraphs(sigmas,ucl,lcl,average,floatPercents,sinkPercents,dates):
-    graphFloat.plotGraphs(sigmas,ucl,lcl,average,floatPercents,sinkPercents,dates)
+def findAverage(floatPercents):# return average of list
+    itemCount =  len(floatPercents)
+    total = 0
+    for percentage in floatPercents:
+        total = total + percentage
+        
+    average = total/itemCount
+    print(average)
+    return average
+
+def standardDeviation(floatPercents):#return std of floats
+    std = stdev(floatPercents)
+    print(std)
+    return std
+
+def findControlLimits(average,std,uclTarget,roundTo100):#return sigma count and control limits based on how many stds to get to 100%
+    currentSigma =  average
+    lclAvg = average
+    sigmaCount = 0
+    while currentSigma <= round(uclTarget,0):
+        currentSigma = currentSigma + std
+        sigmaCount = sigmaCount + 1
+    
+    ucl = currentSigma
+    
+    if roundTo100:
+        ucl = round(ucl,0)
+
+    for sigma in range(sigmaCount):
+        lclAvg = lclAvg - std
+    lcl = lclAvg
+    return ucl,lcl,sigmaCount
+
+def UCL(average,std,sigmas,roundTo100):#calc upper control sigmas is test. roundTo100 rounds it down to 100
+    ucl = average
+    for sigma in range(sigmas):
+        ucl = ucl + std
+    
+    if roundTo100:
+        ucl = round(ucl,0)
+    print(ucl)
+    return ucl
+
+
+def updateControls(uclTarget,roundTo100):
+    averageN = findAverage(floatPercents)
+    std = standardDeviation(floatPercents)
+    ucl,lcl,sigmas = findControlLimits(averageN,std,uclTarget,roundTo100)
+
+    return sigmas,ucl,lcl
 
 
 
-
-#average = findAverage(floatPercents)
-#standardDeviation(floatPercents)
-
-
-#ssigmas,ucl,lcl = updateControls(100,True)
-#floatGraphs = lineGraphFloat.FloatGraphs(3,ucl,lcl,average,floatPercents,sinkPercents,dates)
 
 def call():
     dataSet = getDataFrame("floating_data.csv")
@@ -96,4 +133,9 @@ def call():
     floatPercent(totalWeights,floatingWeights)
     sinkPercent(totalWeights,sinkingWeights)
     
-    barGraph = barGraphFloat.FloatBarGraph(floatPercents,sinkPercents,dates)
+    average = findAverage(floatPercents)
+    
+    sigmas,ucl,lcl = updateControls(100,True)
+    
+    floatGraphs = percentChangeGraphFloat.PercentFloatGraph(3,ucl,lcl,average,floatPercents,sinkPercents,dates)
+call()
