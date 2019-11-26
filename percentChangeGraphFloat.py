@@ -45,7 +45,7 @@ class PercentFloatGraph(object):
         y = np.array(self.floatPercents,float)
         x = np.array(self.dates)
         
-
+        ##24th
 
 
         #x = np.linspace(0.1,2*np.pi,10)
