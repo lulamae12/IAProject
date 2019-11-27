@@ -23,11 +23,11 @@ class FloatBarGraph(object):
         if isBottom:
             for bar in barGraphRectangle:
                 yCoord = (bar.get_height() / 2)  
-                plt.annotate('{}'.format(yCoord*2)+"%",xy=(bar.get_x() + bar.get_width() / 2, yCoord),xytext=(0, 3),textcoords="offset points",ha='center',va="bottom",size="small")
+                plt.annotate('{}'.format(round(yCoord*2,2))+"%",xy=(bar.get_x() + bar.get_width() / 2, yCoord),xytext=(0, 3),textcoords="offset points",ha='center',va="bottom",size="small")
         else:
             for bar in barGraphRectangle:
                 yCoord = (bar.get_height())
-                plt.annotate('{}'.format(yCoord)+"%",xy=(bar.get_x() + bar.get_width() / 2, 102),xytext=(0, 3),textcoords="offset points",ha='center',va="top",size="small")
+                plt.annotate('{}'.format(round(yCoord,2))+"%",xy=(bar.get_x() + bar.get_width() / 2, 102),xytext=(0, 3),textcoords="offset points",ha='center',va="top",size="small")
         
 
     def barGraph(self):

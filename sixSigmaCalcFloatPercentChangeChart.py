@@ -119,7 +119,7 @@ def updateControls(uclTarget,roundTo100):
     std = standardDeviation(floatPercents)
     ucl,lcl,sigmas = findControlLimits(averageN,std,uclTarget,roundTo100)
 
-    return sigmas,ucl,lcl
+    return sigmas,ucl,lcl,std
 
 
 
@@ -135,7 +135,7 @@ def call():
     
     average = findAverage(floatPercents)
     
-    sigmas,ucl,lcl = updateControls(100,True)
+    sigmas,ucl,lcl,std = updateControls(100,True)
     
-    floatGraphs = percentChangeGraphFloat.PercentFloatGraph(3,ucl,lcl,average,floatPercents,sinkPercents,dates)
+    floatGraphs = percentChangeGraphFloat.PercentFloatGraph(3,ucl,lcl,average,floatPercents,sinkPercents,dates,std)
 call()
