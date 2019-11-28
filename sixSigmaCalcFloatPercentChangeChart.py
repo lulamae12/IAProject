@@ -138,4 +138,4 @@ def call():
     sigmas,ucl,lcl,std = updateControls(100,True)
     
     floatGraphs = percentChangeGraphFloat.PercentFloatGraph(3,ucl,lcl,average,floatPercents,sinkPercents,dates,std)
-call()
+#call()

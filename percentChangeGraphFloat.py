@@ -42,16 +42,33 @@ class PercentFloatGraph(object):
 
         return lowerYLim,upperYLim
     
-
-    
+    def makeDateList(self):
+        dateList=[]
+        for i in range(len(self.dates)):
+            dateList.append(i)
+        return dateList
     def percentDevGraph(self):
-        print("self float percents: ",self.floatPercents)
-        print("self float percents len : ",len(self.floatPercents))
+        
         y = np.array(self.floatPercents,float)
         x = np.array(len(self.dates))
-        print(len(self.dates))
-        ##24th
         
+        fig, ax = plt.subplots(figsize=(8,6.6))
+        plt.subplots_adjust(bottom=0.25)#create as subplot for better integration of sldier
+        
+        plt.xlabel("Date")
+        plt.ylabel("Deviations from mean")
+
+
+        plt.title("Floating percent deviations from mean")
+
+        #setup graph limits
+        yLimLow,yLimHigh = self.returnYLims(self.ucl,self.lcl,self.floatPercentsMin,self.floatPercentsMax)
+        plt.ylim(yLimLow - 1,yLimHigh + 1)
+
+
+
+
+
 
         oneSig = self.average + self.std
         twoSig = self.average + self.std + self.std
@@ -61,25 +78,36 @@ class PercentFloatGraph(object):
         print(self.lcl,twoSigUnd,oneSigUnd,self.average,oneSig,twoSig, self.ucl)
 
 
-        plt.yticks([self.lcl,twoSigUnd,oneSigUnd,self.average,oneSig,twoSig, self.ucl],["-3 σ","-2 σ","-1 σ","Average","+1 σ","+2 σ","+3 σ"])
-        #plt.yticklabels({'y = 0','y = 50','y = 100'})
-        #plt.yticks(y, step=0.2)
-        #x = np.linspace(0.1,2*np.pi,10)
-        #markerline, stemlines, baseline = plt.stem(x, np.cos(x), '-.')
+        plt.yticks([self.lcl,twoSigUnd,oneSigUnd,self.average,oneSig,twoSig, self.ucl],["-3 σ","-2 σ","-1 σ","Mean","+1 σ","+2 σ","+3 σ"])
         
+        dateList = self.makeDateList()
         
-        # Create a color if the group is "B"
-        my_color=np.where(y>=0, 'orange', 'skyblue')
+
+        plt.xticks(dateList,self.dates)
         
-        #plt.setp(baseline,"color","r","linewidth",2)
-        plt.stem([0,1,2,3,4,5,6,7,8,9,10],y, use_line_collection=True,markerfmt=' ', bottom=self.average,color=my_color)
+        # rotate and align the tick labels so they look better
+        plt.gcf().autofmt_xdate()
+
+        
+        li = plt.stem([0,1,2,3,4,5,6,7,8,9,10],y, use_line_collection=True,markerfmt='h', bottom=self.average,linefmt="grey")
         
         plt.ylim(self.lcl - 1,self.ucl+1)
  
 
         
 
+        xVals = li[0].get_xdata()
+        yVals = li[0].get_ydata()
+    
 
+
+
+
+        for i in range(len(xVals)):
+            if yVals[i] < self.average:
+                plt.annotate(str(yVals[i]),(xVals[i],yVals[i]),textcoords="offset points",xytext=(-10,-12))
+            else:
+                plt.annotate(str(yVals[i]),(xVals[i],yVals[i]),textcoords="offset points",xytext=(-10,10))
 
         plt.axhline(self.average, color='r', linestyle='-')#plot avg line
         
@@ -87,4 +115,35 @@ class PercentFloatGraph(object):
         plt.autoscale(enable=False)
         
         plt.grid(axis="y")
+        
+        
+        
+        #under is for slider subplot
+        #create slider widget
+        axpos = plt.axes([0.2, 0.01, 0.65, 0.03])
+        positionSlider = Slider(axpos, 'Position: ', -1 , len(self.dates),valfmt="%1.0f",dragging=True,valstep=None)
+
+        def updatePosition(val):#update slider position and change axis veiw
+            pos = positionSlider.val
+            ax.axis([pos,pos+10,yLimLow - 1,yLimHigh + 1])
+            fig.canvas.draw_idle()
+        
+
+        
+
+        positionSlider.on_changed(updatePosition)#call on changed
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         plt.show()

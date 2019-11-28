@@ -3,6 +3,7 @@ import sys,datetime,json
 from PyQt5.QtWidgets import QMessageBox
 import sixSigmaCalcFloatLine as SSCFL
 import sixSigmaCalcFloatBar as SSCFB
+import sixSigmaCalcFloatPercentChangeChart as SSCFPCC
 import csvMaker as csvMaker
 
 
@@ -143,6 +144,7 @@ class floatChooseGraphType(object):
         
         self.veiwLineGraphFloatButton.clicked.connect(self.veiwLineGraphPressed)
         self.veiwBarGraphFloatButton.clicked.connect(self.veiwBarGraphPressed)
+        self.veiwLPercentageChangeFloatButton.clicked.connect(self.veiwSTDGraphPressed)
 
     #go back to add data point menu
     @staticmethod
@@ -162,6 +164,13 @@ class floatChooseGraphType(object):
         csvMaker.create("floatData.txt")
         SSCFB.call()#six sigma calc float bar graph    
 
+    #veiw std graph
+    @staticmethod
+    def veiwSTDGraphPressed(self):
+        csvMaker.create("floatData.txt")
+        SSCFPCC.call()#six sigma calc float bar graph    
+
+
 
 
 
@@ -172,8 +181,8 @@ class floatChooseGraphType(object):
         self.label.setText(_translate("MainWindow", "Default graph. Contains UCL and LCL data for floating data percentages in a detailed line graph"))
         self.veiwBarGraphFloatButton.setText(_translate("MainWindow", "Veiw Floating Distribution Bar Graph"))
         self.label_2.setText(_translate("MainWindow", "Bar graph that shows the distribution of the percent of floating plastic versus the sinking plastic percentage."))
-        self.veiwLPercentageChangeFloatButton.setText(_translate("MainWindow", "Veiw Floating Percentage Change Graph"))
-        self.label_3.setText(_translate("MainWindow", "Graph that shows the percentage distrubiton from the mean of the dataset. can be used as another way to analyze data from the line graph."))
+        self.veiwLPercentageChangeFloatButton.setText(_translate("MainWindow", "Veiw Floating Percentage Deviation Graph"))
+        self.label_3.setText(_translate("MainWindow", "Graph that shows distrubitons from the mean of the dataset. Can be used as another way to analyze data from the line graph."))
         self.returnToFloatMenuButton.setText(_translate("MainWindow", "Return to Float menu"))
         self.label_4.setText(_translate("MainWindow", "Return to previous menu."))
         self.label_5.setText(_translate("MainWindow", "How would you like to veiw your data?"))
