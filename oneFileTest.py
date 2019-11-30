@@ -571,26 +571,99 @@ class editFloatDataPoint(object):
         entryStr = currentItem
         self.confirmDeleteMessage(entryStr)
 
-    
 
+    def removeItemFromList(self,item,file):
+        #HOW WORKS
+        #FIND DATA IN FILE AND THEN WRITE BACK TO FILE EXCLUDING ORIGNINAL DATA POINT
+        dataLines = []
+        
+        itemData = item.strip("\n")
+        itemData = itemData.replace("Entry Date: ","")
+        itemData = itemData.replace("Sinking Plastic Weight: ",":")
+        itemData = itemData.replace("Floating Plastic Weight: ",":")
+        itemData = itemData.replace("\n","")
+        
+        itemDataList = itemData.split(":")
 
+        date = itemDataList[0]
+        sinking = itemDataList[1]
+        floating = itemDataList[2]
+        
+        
+        print("====================================")
+        print("itemData: ",itemDataList)
+        print("====================================")
+
+        
+
+        with open(str(file),"r") as entryFile:
+            for entry in entryFile.readlines():
+                dataLines.append(entry)
+        entryFile.close
+
+        for line in dataLines:
+            lineJson = json.loads(line)
+            
+            
+
+            if str(lineJson["date"]) == str(date) and str(lineJson["sink"]) == str(sinking) and str(lineJson["float"]) == str(floating):
+                print("MATCH FOUND")
+                print(lineJson)
+                print(itemDataList)
+                lineToExclude = line#exclude this line during writeback thus deleting it
+
+                print("Lines: ",dataLines)
+
+                with open(str(file),"r") as entryFile:
+                    lines = entryFile.readlines()
+                with open(str(file),"w") as entryFile:
+                    for line in lines:
+                        
+                        if line != lineToExclude:
+                            entryFile.write(line)
+                        else:
+                            print("LINE REMOVED")
+                self.createAlertPopup("Removed!","Entry was removed succesfully!","Entry Removed!")
+                
+                runClass("editFloatDataPoint") #it updates
+
+    def createAlertPopup(self,title,message,winTitle):
+        alertMsg = QMessageBox()
+        alertMsg.setIcon(QMessageBox.Information)
+        alertMsg.setText(title)
+        alertMsg.setInformativeText(message)
+        alertMsg.setWindowTitle(winTitle)
+        alertMsg.exec()
 
     @staticmethod
     def returnToMenuPressed(self):
         runClass("floatMainMenu")
 
     def confirmDeleteMessage(self,item):
-        
+        item = item.replace("----------------------------------------------------","")
 
         confirmDeleteMessagebox= QMessageBox()
-        confirmDeleteMessagebox.setIcon(QMessageBox.Critical)
-        confirmDeleteMessagebox.setText("Are you sure you would like to delete this entry? \n" + item.replace("----------------------------------------------------","") +"\n")
+        confirmDeleteMessagebox.setIcon(QMessageBox.Warning)
+        confirmDeleteMessagebox.setText("Are you sure you would like to delete the following entry? This action cannot be undone.")
+        
+        
+        confirmDeleteMessagebox.setInformativeText(item)
         confirmDeleteMessagebox.setWindowTitle("Confirm Deletion?")
         confirmDeleteMessagebox.addButton(QMessageBox.Yes)
         confirmDeleteMessagebox.addButton(QMessageBox.No)
         confirmDeleteMessagebox.exec()
+        buttonResult = confirmDeleteMessagebox.clickedButton().text() #could cause probs
+        buttonResult= buttonResult.replace("&","").lower()
+        
+        print(buttonResult)
 
-
+        if buttonResult == "yes":#yes button is pressed
+            print("yes")
+            self.removeItemFromList(item,"floatData.txt")
+        
+        if buttonResult == "no":#no button is pressed
+            print("nomegalul")
+            pass
         
         
 
@@ -604,6 +677,7 @@ class editFloatDataPoint(object):
                 print(entry,"\n")
                 
         #print(entries)
+        entryFile.close()
         return entries
 
 
