@@ -1,10 +1,13 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-import sys,datetime,json
-from PyQt5.QtWidgets import QMessageBox
+import sys,datetime,json,pickle,os
+from PyQt5.QtWidgets import QMessageBox, QFileDialog, QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog
+from PyQt5.QtGui import QIcon
 import sixSigmaCalcFloatLine as SSCFL
 import sixSigmaCalcFloatBar as SSCFB
 import sixSigmaCalcFloatPercentChangeChart as SSCFPCC
 import csvMaker as csvMaker
+from tkinter import *
+from tkinter.filedialog import askopenfilename
 
 
 class floatOrSinkMenu(object):
@@ -63,6 +66,7 @@ class floatOrSinkMenu(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindsow"))
+        #kreygasm
         self.floatingButton.setText(_translate("MainWindow", "Floating"))
         self.sinkingButton.setText(_translate("MainWindow", "Shrinking"))
         self.label.setText(_translate("MainWindow", "Would you like to run the program for floating or shrinking?"))
@@ -254,6 +258,8 @@ class floatMainMenu(object):
         
         self.editDataPointButton.clicked.connect(self.veiwAndEditDatapoints)
 
+        self.settingsButton.clicked.connect(self.floatSettingsPressed)
+
 
     #run graph selection class
     @staticmethod
@@ -271,6 +277,11 @@ class floatMainMenu(object):
     @staticmethod
     def veiwAndEditDatapoints(self):
         runClass("editFloatDataPoint")
+
+    #run settings
+    @staticmethod
+    def floatSettingsPressed(self):
+        runClass("floatSettings")
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -716,16 +727,307 @@ class editFloatDataPoint(object):
 
 
 
+class floatSettings(object):
+    def setupUi(self, MainWindow):
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(453, 475)
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.line = QtWidgets.QFrame(self.centralwidget)
+        self.line.setGeometry(QtCore.QRect(20, 50, 411, 20))
+        self.line.setFrameShadow(QtWidgets.QFrame.Plain)
+        self.line.setLineWidth(3)
+        self.line.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line.setObjectName("line")
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setGeometry(QtCore.QRect(20, 20, 411, 41))
+        font = QtGui.QFont()
+        font.setPointSize(20)
+        self.label.setFont(font)
+        self.label.setAlignment(QtCore.Qt.AlignCenter)
+        self.label.setObjectName("label")
+        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_2.setGeometry(QtCore.QRect(20, 70, 401, 41))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.label_2.setFont(font)
+        self.label_2.setObjectName("label_2")
+        self.uclTargetInput = QtWidgets.QTextEdit(self.centralwidget)
+        self.uclTargetInput.setGeometry(QtCore.QRect(220, 80, 41, 21))
+        self.uclTargetInput.setAcceptDrops(True)
+        self.uclTargetInput.setAutoFillBackground(False)
+        self.uclTargetInput.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.uclTargetInput.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.uclTargetInput.setObjectName("uclTargetInput")
+        self.setUclTargetButton = QtWidgets.QPushButton(self.centralwidget)
+        self.setUclTargetButton.setGeometry(QtCore.QRect(270, 80, 41, 21))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.setUclTargetButton.setFont(font)
+        self.setUclTargetButton.setObjectName("setUclTargetButton")
+        self.label_3 = QtWidgets.QLabel(self.centralwidget)
+        self.label_3.setGeometry(QtCore.QRect(20, 120, 151, 41))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.label_3.setFont(font)
+        self.label_3.setObjectName("label_3")
+        self.label_4 = QtWidgets.QLabel(self.centralwidget)
+        self.label_4.setGeometry(QtCore.QRect(20, 90, 411, 41))
+        self.label_4.setWordWrap(True)
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.label_4.setFont(font)
+        self.label_4.setObjectName("label_4")
+        self.uclTargetLabel = QtWidgets.QLabel(self.centralwidget)
+        self.uclTargetLabel.setGeometry(QtCore.QRect(170, 120, 41, 41))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.uclTargetLabel.setFont(font)
+        self.uclTargetLabel.setObjectName("uclTargetLabel")
+        self.exportDataButton = QtWidgets.QPushButton(self.centralwidget)
+        self.exportDataButton.setGeometry(QtCore.QRect(20, 170, 411, 31))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.exportDataButton.setFont(font)
+        self.exportDataButton.setObjectName("exportDataButton")
+        self.label_5 = QtWidgets.QLabel(self.centralwidget)
+        self.label_5.setGeometry(QtCore.QRect(20, 200, 411, 41))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.label_5.setFont(font)
+        self.label_5.setWordWrap(True)
+        self.label_5.setObjectName("label_5")
+        self.label_6 = QtWidgets.QLabel(self.centralwidget)
+        self.label_6.setGeometry(QtCore.QRect(20, 280, 411, 41))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.label_6.setFont(font)
+        self.label_6.setWordWrap(True)
+        self.label_6.setObjectName("label_6")
+        self.importDataButton = QtWidgets.QPushButton(self.centralwidget)
+        self.importDataButton.setGeometry(QtCore.QRect(20, 250, 411, 31))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.importDataButton.setFont(font)
+        self.importDataButton.setObjectName("importDataButton")
+        self.label_7 = QtWidgets.QLabel(self.centralwidget)
+        self.label_7.setGeometry(QtCore.QRect(20, 350, 411, 41))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.label_7.setFont(font)
+        self.label_7.setWordWrap(True)
+        self.label_7.setObjectName("label_7")
+        self.resetDataButton = QtWidgets.QPushButton(self.centralwidget)
+        self.resetDataButton.setGeometry(QtCore.QRect(20, 320, 411, 31))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.resetDataButton.setFont(font)
+        self.resetDataButton.setObjectName("resetDataButton")
+        self.returnToMenuButton = QtWidgets.QPushButton(self.centralwidget)
+        self.returnToMenuButton.setGeometry(QtCore.QRect(20, 390, 411, 31))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.returnToMenuButton.setFont(font)
+        self.returnToMenuButton.setObjectName("returnToMenuButton")
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(MainWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 453, 21))
+        self.menubar.setObjectName("menubar")
+        MainWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setObjectName("statusbar")
+        MainWindow.setStatusBar(self.statusbar)
+        self.updateUclLabel()
+        self.retranslateUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+
+        self.returnToMenuButton.clicked.connect(self.returnToMenuPressed)
+
+        self.setUclTargetButton.clicked.connect(lambda: self.settingsSetUcl())
+
+        self.exportDataButton.clicked.connect(lambda: self.exportFloatData())
+
+        self.importDataButton.clicked.connect(lambda: self.importFloatData())
+        
+        
+
+    def retranslateUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.label.setText(_translate("MainWindow", "Float Settings"))
+        self.label_2.setText(_translate("MainWindow", "Upper Control Limit Target: "))
+        self.setUclTargetButton.setText(_translate("MainWindow", "Set"))
+        self.label_3.setText(_translate("MainWindow", "Current UCL Target:"))
+        self.label_4.setText(_translate("MainWindow", "Sets the upper control limit target. In most cases it would round to 100 because it is not possible to go above 100%. Default = 100"))
+        self.uclTargetLabel.setText(_translate("MainWindow", "100"))
+        self.exportDataButton.setText(_translate("MainWindow", "Export Data"))
+        self.label_5.setText(_translate("MainWindow", "Export floating data in .SSG format so that it can be reimported to the program elsewhere "))
+        self.label_6.setText(_translate("MainWindow", "Import floating data in .SSG format so that it can be used."))
+        self.importDataButton.setText(_translate("MainWindow", "Import Data"))
+        self.label_7.setText(_translate("MainWindow", "Resets all floating data"))
+        self.resetDataButton.setText(_translate("MainWindow", "Reset all Floating Data"))
+        self.returnToMenuButton.setText(_translate("MainWindow", "Return To Menu"))
+        self.updateUclLabel()
+        
+    
+
+
+    @staticmethod
+    def returnToMenuPressed(self):
+        runClass("floatMainMenu")
+    
+    def settingsSetUcl(self):
+        
+        
+        uclString = self.uclTargetInput.toPlainText()
+        
+        
+        try:
+            uclInt = round(int(uclString),0)
+        except ValueError:
+            self.createErrorMessage("Value Error","Error! Value must be a whole number (ex. '100') not a decimal or non numeric value.)")
+            return
+
+        print("ucl int: ",uclInt)
+
+        
+        
+        with open("floatSettings.txt","w") as settingsFile:
+            
+            
+            settingsFile.write(str(uclInt))
+        settingsFile.close()
+        self.updateUclLabel()
+
+    def updateUclLabel(self):
+
+        try:
+            with open("floatSettings.txt","r") as settingsFile:
+                
+                
+                lines = settingsFile.readlines()
+                print(lines)
+            settingsFile.close()
+        except FileNotFoundError:
+            with open("floatSettings.txt","w") as settingsFile:
+                
+                
+                settingsFile.write("100")
+            settingsFile.close()
+            with open("floatSettings.txt","r") as settingsFile:
+                
+                
+                lines = settingsFile.readlines()
+                print(lines)
+            settingsFile.close()
+        
+        ucl = lines[0]
+        self.uclTargetLabel.setText(str(ucl))
+    
+
+    #create error message based on input
+    def createErrorMessage(self,title,message):
+        errorMsg = QMessageBox()
+        errorMsg.setIcon(QMessageBox.Critical)
+        errorMsg.setText(title)
+        errorMsg.setInformativeText(message)
+        errorMsg.setWindowTitle(title)
+        errorMsg.exec()
+    
+    def createInfoMessage(self,title,message):
+        infoMsg = QMessageBox()
+        infoMsg.setIcon(QMessageBox.Information)
+        infoMsg.setText(title)
+        infoMsg.setInformativeText(message)
+        infoMsg.setWindowTitle(title)
+        infoMsg.exec()
+
+    def exportFloatData(self):
+        lines =[]
+        cwd = os.getcwd()
+        print("cwd: ",cwd)
+        with open("floatData.txt","r") as floatData:
+            lines = floatData.readlines() 
+        floatData.close()
+
+        with open("floatDataExported.ssg","wb") as outfile:
+            pickle.dump(lines,outfile)
+        outfile.close()
+        self.createInfoMessage("Data Exported Succesfully!","File: 'floatDataExported.ssg' has been exported to directory: " +str(cwd) +"")
+
+    def importFloatData(self):
+        root = Tk()
+        
+        root.withdraw() #don't want a full GUi keep the root window from appearing
+        ftypes = [
+        ('Six Sigma Grapher files', '*.ssg'),  
+        ('All files', '*'), 
+        ]
+        
+        filePath = askopenfilename(filetypes=ftypes) # show "Open" dialog box and return path
+        
+        if ".ssg" in filePath:
+            print("acceptable file")
+
+            
+        
+
+            confirmImportMessagebox= QMessageBox()
+            confirmImportMessagebox.setIcon(QMessageBox.Warning)
+            confirmImportMessagebox.setText("Are you sure you would like to import this data? This action cannot be undone and all current data will be overwritten.")
+        
+
+            
+            confirmImportMessagebox.setWindowTitle("Import and Overwrite?")
+            confirmImportMessagebox.addButton(QMessageBox.Yes)
+            confirmImportMessagebox.addButton(QMessageBox.No)
+            confirmImportMessagebox.exec()
+            buttonResult = confirmImportMessagebox.clickedButton().text() #could cause probs
+            buttonResult= buttonResult.replace("&","").lower()
+
+            
+
+            if buttonResult == "yes":#yes button is pressed
+                print("yes")
+                importedFile = open(filePath,"rb")
+                importedFileData = pickle.load(importedFile)
+                importedFile.close()
+                print(importedFileData)
+                print(type(importedFileData))
+                
+                with open("floatData.txt","w") as floatData:
+                    for line in importedFileData:
+                        floatData.write(line)
+                floatData.close()
+                self.createInfoMessage("File imported succesfully!","File: 'floatData.txt' has been imported succesfully!")
+
+                
+        
+            if buttonResult == "no":#no button is pressed
+                print("nomegalul")
+                pass
+
+
+        else:
+            self.createErrorMessage("Invalid Filetype!","This is an invalid filetype! Only '.ssg' files are accepeted!")
+            return
+        
 
 
 
-#class called to call another class. hows that for an alitteration?
+
+
+#callable class called to call another class. hows that for an alitteration?
 def runClass(name):
     #must calll as a static method
     MainWindow.close
     className = eval(name)()
     className.setupUi(MainWindow)
     MainWindow.show
+
+ 
+
 
 
 

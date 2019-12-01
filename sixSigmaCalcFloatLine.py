@@ -99,11 +99,13 @@ def findControlLimits(average,std,uclTarget,roundTo100):#return sigma count and 
     currentSigma =  average
     lclAvg = average
     sigmaCount = 0
+
+    
     while currentSigma <= round(uclTarget,0):
         currentSigma = currentSigma + std
         sigmaCount = sigmaCount + 1
     
-    ucl = currentSigma
+    ucl = uclTarget
     
     if roundTo100:
         ucl = round(ucl,0)
@@ -112,7 +114,7 @@ def findControlLimits(average,std,uclTarget,roundTo100):#return sigma count and 
         lclAvg = lclAvg - std
     lcl = lclAvg
     
-    
+    #ucl = 100
     
     return ucl,lcl,sigmaCount
 
@@ -124,12 +126,22 @@ def UCL(average,std,sigmas,roundTo100):#calc upper control sigmas is test. round
     if roundTo100:
         ucl = round(ucl,0)
     print(ucl)
+    print("hellllllo")
     return ucl
 
 #def LCL(average,std):#calc lower control sigmas is test
 def updateControls(uclTarget,roundTo100):
     averageN = findAverage(floatPercents)
     std = standardDeviation(floatPercents)
+    
+    with open("floatSettings.txt","r") as settingsFile:
+        lines = settingsFile.readlines()
+        uclTarget = int(lines[0])
+
+    
+    
+    
+    
     ucl,lcl,sigmas = findControlLimits(averageN,std,uclTarget,roundTo100)
 
     print("Sigmas: ",sigmas)
