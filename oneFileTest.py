@@ -1,6 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-import sys,datetime,json,pickle,os
-from PyQt5.QtWidgets import QMessageBox, QFileDialog, QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog
+import sys,datetime,json,pickle,os,time
+from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtGui import QIcon
 import sixSigmaCalcFloatLine as SSCFL
 import sixSigmaCalcFloatBar as SSCFB
@@ -730,7 +730,7 @@ class editFloatDataPoint(object):
 class floatSettings(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(453, 475)
+        MainWindow.resize(453, 538)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.line = QtWidgets.QFrame(self.centralwidget)
@@ -773,7 +773,6 @@ class floatSettings(object):
         self.label_3.setObjectName("label_3")
         self.label_4 = QtWidgets.QLabel(self.centralwidget)
         self.label_4.setGeometry(QtCore.QRect(20, 90, 411, 41))
-        self.label_4.setWordWrap(True)
         font = QtGui.QFont()
         font.setPointSize(8)
         self.label_4.setFont(font)
@@ -785,20 +784,20 @@ class floatSettings(object):
         self.uclTargetLabel.setFont(font)
         self.uclTargetLabel.setObjectName("uclTargetLabel")
         self.exportDataButton = QtWidgets.QPushButton(self.centralwidget)
-        self.exportDataButton.setGeometry(QtCore.QRect(20, 170, 411, 31))
+        self.exportDataButton.setGeometry(QtCore.QRect(20, 180, 411, 31))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.exportDataButton.setFont(font)
         self.exportDataButton.setObjectName("exportDataButton")
         self.label_5 = QtWidgets.QLabel(self.centralwidget)
-        self.label_5.setGeometry(QtCore.QRect(20, 200, 411, 41))
+        self.label_5.setGeometry(QtCore.QRect(20, 210, 411, 41))
         font = QtGui.QFont()
         font.setPointSize(8)
         self.label_5.setFont(font)
         self.label_5.setWordWrap(True)
         self.label_5.setObjectName("label_5")
         self.label_6 = QtWidgets.QLabel(self.centralwidget)
-        self.label_6.setGeometry(QtCore.QRect(20, 280, 411, 41))
+        self.label_6.setGeometry(QtCore.QRect(20, 270, 411, 41))
         font = QtGui.QFont()
         font.setPointSize(8)
         self.label_6.setFont(font)
@@ -811,24 +810,43 @@ class floatSettings(object):
         self.importDataButton.setFont(font)
         self.importDataButton.setObjectName("importDataButton")
         self.label_7 = QtWidgets.QLabel(self.centralwidget)
-        self.label_7.setGeometry(QtCore.QRect(20, 350, 411, 41))
+        self.label_7.setGeometry(QtCore.QRect(20, 420, 411, 41))
         font = QtGui.QFont()
         font.setPointSize(8)
         self.label_7.setFont(font)
         self.label_7.setWordWrap(True)
         self.label_7.setObjectName("label_7")
         self.resetDataButton = QtWidgets.QPushButton(self.centralwidget)
-        self.resetDataButton.setGeometry(QtCore.QRect(20, 320, 411, 31))
+        self.resetDataButton.setGeometry(QtCore.QRect(20, 390, 411, 31))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.resetDataButton.setFont(font)
         self.resetDataButton.setObjectName("resetDataButton")
         self.returnToMenuButton = QtWidgets.QPushButton(self.centralwidget)
-        self.returnToMenuButton.setGeometry(QtCore.QRect(20, 390, 411, 31))
+        self.returnToMenuButton.setGeometry(QtCore.QRect(20, 460, 411, 31))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.returnToMenuButton.setFont(font)
         self.returnToMenuButton.setObjectName("returnToMenuButton")
+        self.line_2 = QtWidgets.QFrame(self.centralwidget)
+        self.line_2.setGeometry(QtCore.QRect(20, 150, 201, 16))
+        self.line_2.setFrameShadow(QtWidgets.QFrame.Plain)
+        self.line_2.setLineWidth(3)
+        self.line_2.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line_2.setObjectName("line_2")
+        self.createBackupButton = QtWidgets.QPushButton(self.centralwidget)
+        self.createBackupButton.setGeometry(QtCore.QRect(20, 320, 411, 31))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.createBackupButton.setFont(font)
+        self.createBackupButton.setObjectName("createBackupButton")
+        self.label_8 = QtWidgets.QLabel(self.centralwidget)
+        self.label_8.setGeometry(QtCore.QRect(20, 340, 411, 41))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.label_8.setFont(font)
+        self.label_8.setWordWrap(True)
+        self.label_8.setObjectName("label_8")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 453, 21))
@@ -846,9 +864,11 @@ class floatSettings(object):
 
         self.setUclTargetButton.clicked.connect(lambda: self.settingsSetUcl())
 
-        self.exportDataButton.clicked.connect(lambda: self.exportFloatData())
+        self.exportDataButton.clicked.connect(lambda: self.exportFloatData("floatDataExported.ssg"))
 
         self.importDataButton.clicked.connect(lambda: self.importFloatData())
+
+        self.resetDataButton.clicked.connect(lambda: self.clearAllData())
         
         
 
@@ -859,7 +879,7 @@ class floatSettings(object):
         self.label_2.setText(_translate("MainWindow", "Upper Control Limit Target: "))
         self.setUclTargetButton.setText(_translate("MainWindow", "Set"))
         self.label_3.setText(_translate("MainWindow", "Current UCL Target:"))
-        self.label_4.setText(_translate("MainWindow", "Sets the upper control limit target. In most cases it would round to 100 because it is not possible to go above 100%. Default = 100"))
+        self.label_4.setText(_translate("MainWindow", "Sets the upper control limit target. Default = 100"))
         self.uclTargetLabel.setText(_translate("MainWindow", "100"))
         self.exportDataButton.setText(_translate("MainWindow", "Export Data"))
         self.label_5.setText(_translate("MainWindow", "Export floating data in .SSG format so that it can be reimported to the program elsewhere "))
@@ -868,6 +888,9 @@ class floatSettings(object):
         self.label_7.setText(_translate("MainWindow", "Resets all floating data"))
         self.resetDataButton.setText(_translate("MainWindow", "Reset all Floating Data"))
         self.returnToMenuButton.setText(_translate("MainWindow", "Return To Menu"))
+        self.createBackupButton.setText(_translate("MainWindow", "Create a Data Backup"))
+        self.label_8.setText(_translate("MainWindow", "Import floating data in .SSG format so that it can be used."))
+
         self.updateUclLabel()
         
     
@@ -943,7 +966,7 @@ class floatSettings(object):
         infoMsg.setWindowTitle(title)
         infoMsg.exec()
 
-    def exportFloatData(self):
+    def exportFloatData(self,fileExportName):
         lines =[]
         cwd = os.getcwd()
         print("cwd: ",cwd)
@@ -951,10 +974,12 @@ class floatSettings(object):
             lines = floatData.readlines() 
         floatData.close()
 
-        with open("floatDataExported.ssg","wb") as outfile:
+        #"floatDataExported.ssg"
+
+        with open(fileExportName,"wb") as outfile:
             pickle.dump(lines,outfile)
         outfile.close()
-        self.createInfoMessage("Data Exported Succesfully!","File: 'floatDataExported.ssg' has been exported to directory: " +str(cwd) +"")
+        self.createInfoMessage("Data Exported Succesfully!","File: '"+ str(fileExportName) +"' has been exported to directory: " +str(cwd) +"")
 
     def importFloatData(self):
         root = Tk()
@@ -1014,9 +1039,83 @@ class floatSettings(object):
             return
         
 
+    def clearAllData(self):
+        confirmDeleteMessagebox= QMessageBox()
+        confirmDeleteMessagebox.setIcon(QMessageBox.Warning)
+        confirmDeleteMessagebox.setText("Are you sure you would like to delete all data? This action is irreversible and all current data will be lost!")
+    
+
+        
+        confirmDeleteMessagebox.setWindowTitle("Delete data?")
+        confirmDeleteMessagebox.addButton(QMessageBox.Yes)
+        confirmDeleteMessagebox.addButton(QMessageBox.No)
+        confirmDeleteMessagebox.exec()
+        buttonResult = confirmDeleteMessagebox.clickedButton().text() #could cause probs
+        buttonResult= buttonResult.replace("&","").lower()
+
+        if buttonResult == "yes":#yes button is pressed
+            
+            time.sleep(1)
+            
+            proceedMessagebox= QMessageBox()
+            proceedMessagebox.setIcon(QMessageBox.Warning)
+            proceedMessagebox.setText("Are you sure you would like proceed?")
+        
+
+            
+            proceedMessagebox.setWindowTitle("Proceed?")
+            proceedMessagebox.addButton(QMessageBox.Yes)
+            proceedMessagebox.addButton(QMessageBox.No)
+            proceedMessagebox.exec()
+            proceedButtonResult =proceedMessagebox.clickedButton().text() #could cause probs
+            proceedButtonResult= buttonResult.replace("&","").lower()
+
+            if proceedButtonResult == "yes":#yes button is pressed
+                print("proceeding to delete.")
+                time.sleep(.3)
+                print("proceeding to delete..")
+                time.sleep(.3)
+                print("proceeding to delete...")
+                time.sleep(.3)
+                print("Deleted!")
+
+                currentDate = datetime.date.today()
+                day = currentDate.day
+                month = currentDate.month
+                year = currentDate.year
+
+                formattedDate = "%s-%s-%s" % (month,day,year)
+        
+
+                backupFileName = str("floatDataExported-Backup-"+formattedDate+".ssg")
 
 
+                self.exportFloatData(str(backupFileName))
+                
+                
+                
+                with open("floatData.txt","w") as floatData:
+                    floatData.write("")
+                floatData.close()
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                self.createInfoMessage("Data Deleted and Backup Created!","All exsiting data has been deleted. A backup of the data was saved to file '"+str(backupFileName)+"' before it was deleted.")
 
+
+                
 
 #callable class called to call another class. hows that for an alitteration?
 def runClass(name):
