@@ -5,7 +5,7 @@ from datetime import datetime
 from matplotlib.widgets import Button,Slider
 import matplotlib.patches as patches
 
-class FloatGraphs(object):
+class SinkGraphs(object):
 
 
     def __init__(self,sigmas,ucl,lcl,average,floatPercents,sinkPercents,dates):
@@ -19,8 +19,8 @@ class FloatGraphs(object):
         self.floatPercents = floatPercents
         self.sinkPercents = sinkPercents
         self.dates = dates
-        self.floatPercentsMin = self.listMin(floatPercents)
-        self.floatPercentsMax = self.listMax(floatPercents)
+        self.sinkPercentsMin = self.listMin(sinkPercents)
+        self.sinkPercentsMax = self.listMax(sinkPercents)
         self.lineGraph()
     def listMin(self,list):
         print(min(list))
@@ -28,26 +28,26 @@ class FloatGraphs(object):
     def listMax(self,list):
         print(max(list))
         return max(list)
-    def returnYLims(self,ucl,lcl,floatPercentsMin,floatPercentsMax):
+    def returnYLims(self,ucl,lcl,sinkPercentsMin,sinkPercentsMax):
         lowerYLim = 0
         upperYLim = 0
         
 
-        if lcl < floatPercentsMin:
+        if lcl < sinkPercentsMin:
             lowerYLim = lcl
         else:
-            lowerYLim = floatPercentsMin    
-        if ucl > floatPercentsMax:
+            lowerYLim = sinkPercentsMin    
+        if ucl > sinkPercentsMax:
             upperYLim = ucl
         else:
-            upperYLim = floatPercentsMax
+            upperYLim = sinkPercentsMax
 
         return lowerYLim,upperYLim
     
     def lineGraph(self):
-        print("self float percents: ",self.floatPercents)
-        print("self float percents len : ",len(self.floatPercents))
-        y = np.array(self.floatPercents,float)
+        print("self sink percents: ",self.sinkPercents)
+        print("self sink percents len : ",len(self.sinkPercents))
+        y = np.array(self.sinkPercents,float)
         x = np.array(self.dates)
         xRange = len(x)
         print(xRange)
@@ -65,7 +65,7 @@ class FloatGraphs(object):
 
 
         #setup graph limits
-        yLimLow,yLimHigh = self.returnYLims(self.ucl,self.lcl,self.floatPercentsMin,self.floatPercentsMax)
+        yLimLow,yLimHigh = self.returnYLims(self.ucl,self.lcl,self.sinkPercentsMin,self.sinkPercentsMax)
         plt.ylim(yLimLow - 1,yLimHigh + 1)
         
         #create lcl and ucl lines
@@ -99,9 +99,9 @@ class FloatGraphs(object):
         uclPatch = patches.Patch(color="green",label="Upper Control Limit : " + str(self.ucl) )
         lclPatch = patches.Patch(color="red",label="Lower Control Limit : " + str(round(self.lcl,2)) )
         avgPatch = patches.Patch(color = "yellow",label="Average: "+str(round(self.average,2)))
-        floatPatch = patches.Patch(color = "blue",label="Floating Percentage")
+        sinkPatch = patches.Patch(color = "blue",label="Sinking Percentage")
 
-        plt.legend(bbox_to_anchor=(0., 1, 1., .10), loc='lower left',ncol=2,handles=[uclPatch,avgPatch,lclPatch,floatPatch],framealpha=1, mode="expand",title="Floating Graph", borderaxespad=0.9)
+        plt.legend(bbox_to_anchor=(0., 1, 1., .10), loc='lower left',ncol=2,handles=[uclPatch,avgPatch,lclPatch,sinkPatch],framealpha=1, mode="expand",title="Sinking Percentage Graph", borderaxespad=0.9)
         #plt.legend(bbox_to_anchor=(1,0.5), loc='center right',handles=[uclPatch,avgPatch,lclPatch])
         
        
@@ -109,7 +109,7 @@ class FloatGraphs(object):
 
 
         #label points 
-        for i in range(len(self.floatPercents)):
+        for i in range(len(self.sinkPercents)):
             plt.annotate(str(yVals[i]),(xVals[i],yVals[i]),textcoords="offset points",xytext=(0,10))
        
 
