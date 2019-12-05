@@ -1,6 +1,8 @@
 import pandas,numpy,sys
 from statistics import stdev
 import percentChangeGraphFloat
+import tkinter as tk
+from tkinter import ttk
 
 #################################################################################
 #init
@@ -79,6 +81,14 @@ def findAverage(floatPercents):# return average of list
     average = total/itemCount
     print(average)
     return average
+def popupmsg(msg):
+    popup = tk.Tk()
+    popup.wm_title("!")
+    label = ttk.Label(popup, text=msg)
+    label.pack(side="top", fill="x", pady=10)
+    B1 = ttk.Button(popup, text="Close", command = popup.destroy)
+    B1.pack()
+    popup.mainloop()
 
 def standardDeviation(floatPercents):#return std of floats
     std = stdev(floatPercents)
@@ -135,7 +145,11 @@ def call():
     
     average = findAverage(floatPercents)
     
-    sigmas,ucl,lcl,std = updateControls(100,True)
+    try:
+        sigmas,ucl,lcl,std = updateControls(100,True)
+    except:
+        popupmsg("Error! 2 or more values must be given to veiw this graph!")
+        return None
     
     floatGraphs = percentChangeGraphFloat.PercentFloatGraph(3,ucl,lcl,average,floatPercents,sinkPercents,dates,std)
 #call()

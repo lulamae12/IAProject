@@ -97,8 +97,12 @@ class PercentFloatGraph(object):
         # rotate and align the tick labels so they look better
         plt.gcf().autofmt_xdate()
 
+        xList = []
+        for i in range(len(dateList)):
+            xList.append(i)
+        print(xList)
         
-        li = plt.stem([0,1,2,3,4,5,6,7,8,9,10],y,markerfmt='h', bottom=self.average,linefmt="grey")
+        li = plt.stem(xList,y,markerfmt='h', bottom=self.average,linefmt="grey")
         
         plt.ylim(self.lcl - 1,self.ucl+1)
  

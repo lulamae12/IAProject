@@ -1,16 +1,26 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-import sys,datetime,json,pickle,os,time
+import sys,datetime,json,pickle,os,time,platform
 from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtGui import QIcon
 import sixSigmaCalcFloatLine as SSCFL
 import sixSigmaCalcFloatBar as SSCFB
 import sixSigmaCalcFloatPercentChangeChart as SSCFPCC
 import sixSigmaCalcSinkBar as SSCSB
+import sixSigmaCalcSinkLine as SSCSL
+import sixSigmaCalcSinkPercentChangeChart as SSCSPCC
 
 import csvMaker as csvMaker
 import sinkingFileClass as SFC
 from tkinter import *
 from tkinter.filedialog import askopenfilename
+
+
+
+
+
+
+
+
 
 
 class floatOrSinkMenu(object):
@@ -62,9 +72,7 @@ class floatOrSinkMenu(object):
         runClass("floatMainMenu")
 
     @staticmethod
-    def sinkingPressed(self):
-        print("hi")
-       
+    def sinkingPressed(self):       
         runClass("SinkMainMenu")
         #pass
     
@@ -153,36 +161,67 @@ class floatChooseGraphType(object):
 
         self.returnToFloatMenuButton.clicked.connect(self.backButtonPressed)
         
-        self.veiwLineGraphFloatButton.clicked.connect(self.veiwLineGraphPressed)
-        self.veiwBarGraphFloatButton.clicked.connect(self.veiwBarGraphPressed)
-        self.veiwLPercentageChangeFloatButton.clicked.connect(self.veiwSTDGraphPressed)
+        self.veiwLineGraphFloatButton.clicked.connect(lambda: self.veiwLineGraphPressed())
+        self.veiwBarGraphFloatButton.clicked.connect(lambda: self.veiwBarGraphPressed())
+        self.veiwLPercentageChangeFloatButton.clicked.connect(lambda: self.veiwSTDGraphPressed())
+
+    
+
 
     #go back to add data point menu
     @staticmethod
     def backButtonPressed(self):
         runClass("floatMainMenu")
     
+    
+        
+    
     #veiw Linegraph
-    @staticmethod
     def veiwLineGraphPressed(self):
-        csvMaker.create("floatData.txt")
+        csvMaker.create("0","floatData.txt")
+        try:
+            
+            csvMaker.create("0","floatData.txt")
+        except:
+            self.createErrorMessage("Error!","Error occured while trying to load graph. Please ensure that you have a suffcient amount of data available to graph.")
+            return None
         SSCFL.call()#six sigma calc float line graph    
 
     #veiw BarGraph
-    @staticmethod
+    
     def veiwBarGraphPressed(self):
-        print("hi")
-        csvMaker.create("floatData.txt")
+        
+        
+        try:
+            
+            csvMaker.create("0","floatData.txt")
+        except:
+            self.createErrorMessage("Error!","Error occured while trying to load graph. Please ensure that you have a suffcient amount of data available to graph.")
+            return None
         SSCFB.call()#six sigma calc float bar graph    
 
     #veiw std graph
-    @staticmethod
+    
     def veiwSTDGraphPressed(self):
-        csvMaker.create("floatData.txt")
+        
+        try:
+            
+            csvMaker.create("0","floatData.txt")
+        except:
+            self.createErrorMessage("Error!","Error occured while trying to load graph. Please ensure that you have a suffcient amount of data available to graph.")
+            return None
+        print("STD GRAPH PRESSED")
         SSCFPCC.call()#six sigma calc float bar graph    
 
 
-
+    #create error message based on input
+    def createErrorMessage(self,title,message):
+        errorMsg = QMessageBox()
+        errorMsg.setIcon(QMessageBox.Critical)
+        errorMsg.setText(title)
+        errorMsg.setInformativeText(message)
+        errorMsg.setWindowTitle(title)
+        errorMsg.exec()
 
 
     def retranslateUi(self, MainWindow):
@@ -349,10 +388,7 @@ class fmmAddDP(object):
         self.currentDateLabel = QtWidgets.QLabel(self.centralwidget)
         self.currentDateLabel.setGeometry(QtCore.QRect(190, 160, 121, 20))
         self.currentDateLabel.setObjectName("currentDateLabel")
-        self.currentDateLabel.setText(_translate("MainWindow", self.currentDateFormatted()))
-        
-        
-
+        self.currentDateLabel.setText(_translate("MainWindow", self.currentDateFormatted()))        
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setGeometry(QtCore.QRect(30, 200, 271, 31))
         self.pushButton.setObjectName("pushButton")#veiw graphs
@@ -373,13 +409,14 @@ class fmmAddDP(object):
         self.quitToMenuButton.setGeometry(QtCore.QRect(30, 280, 271, 31))
         self.quitToMenuButton.setObjectName("quitToMenuButton")
         self.statusLabel = QtWidgets.QLabel(self.centralwidget)
-        self.statusLabel.setGeometry(QtCore.QRect(110, 10, 111, 20))
+        self.statusLabel.setGeometry(QtCore.QRect(60, 10, 221, 20))
         font = QtGui.QFont()
         font.setPointSize(10)
         self.statusLabel.setFont(font)
         self.statusLabel.setText("")
         self.statusLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.statusLabel.setObjectName("statusLabel")
+        
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 331, 21))
@@ -422,12 +459,12 @@ class fmmAddDP(object):
             self.dateTextBox.setDisabled(True)
         else:
             self.dateTextBox.setDisabled(False)
-        
+    
+    
 
     def addPoint(self):
         sinkWeightFloat = ""
         floatWeightFloat = ""
-        
         if self.useCurrentDatecheckBox.isChecked():
             dateString = str(self.currentDateFormatted())
         else:
@@ -441,13 +478,14 @@ class fmmAddDP(object):
             sinkWeightFloat = float(sinkWeightString)
         except ValueError:
             self.createErrorMessage("Error!","Input for Sink Weight is Invalid!")
+            self.updateStatusLabel("red",False,str("ERROR: Sink weight Error!"))
             sinkErrorIn = True
         try:
             floatWeightFloat = float(floatWeightString)
         except ValueError:
             self.createErrorMessage("Error!","Input for Float Weight is Invalid!")
             floatErrorIn = True
-
+            self.updateStatusLabel("red",False,str("ERROR: Float weight Error!"))
         if floatErrorIn != False or sinkErrorIn != False:
             print(floatErrorIn)
             print(sinkErrorIn)
@@ -459,8 +497,17 @@ class fmmAddDP(object):
         
         
         data = self.makeJsonData(dateString,sinkWeightFloat,floatWeightFloat)
+        
+
         self.saveToJson(data)
+        self.updateStatusLabel("green",False,str("Point: "+str(dateString)+" added!"))
     
+    def updateStatusLabel(self,color,clear,text):
+        self.statusLabel.setText("<font color='"+color+"'>"+text+"</font>")
+
+
+
+
     #format data to json dict
     def makeJsonData(self,date,sinkWeight,floatWeight):
         
@@ -468,9 +515,16 @@ class fmmAddDP(object):
             
         print(data)
         return data
+
+
+    
+
+ 
     #save data
     def saveToJson(self,data):
-        with open('floatData.txt', 'a') as file:
+
+        cwd  = os.getcwd()
+        with open(os.path.join(cwd,"Float Data\\floatData.txt"), 'a') as file:
             json.dump(data, file)
             file.write("\n")
 
@@ -589,6 +643,7 @@ class editFloatDataPoint(object):
         entryStr = currentItem
         self.confirmDeleteMessage(entryStr)
 
+    
 
     def removeItemFromList(self,item,file):
         #HOW WORKS
@@ -612,9 +667,12 @@ class editFloatDataPoint(object):
         print("itemData: ",itemDataList)
         print("====================================")
 
+        cwd = os.getcwd()
+        
+       
         
 
-        with open(str(file),"r") as entryFile:
+        with open(os.path.join(cwd,"Float Data\\"+str(file)),"r") as entryFile:
             for entry in entryFile.readlines():
                 dataLines.append(entry)
         entryFile.close
@@ -632,9 +690,11 @@ class editFloatDataPoint(object):
 
                 print("Lines: ",dataLines)
 
-                with open(str(file),"r") as entryFile:
+                
+                cwd = os.getcwd()
+                with open(os.path.join(cwd,"Float Data\\"+ str(file)),"r") as entryFile:
                     lines = entryFile.readlines()
-                with open(str(file),"w") as entryFile:
+                with open(os.path.join(cwd,"Float Data\\"+ str(file)),"w") as entryFile:
                     for line in lines:
                         
                         if line != lineToExclude:
@@ -689,7 +749,8 @@ class editFloatDataPoint(object):
 
     def fillList(self,list):
         entries = []
-        with open(str(list),"r") as entryFile:
+        cwd = os.getcwd()
+        with open(os.path.join(cwd,"Float Data\\"+ str(list)),"r") as entryFile:
             for entry in entryFile.readlines():
                 entries.append(entry)
                 print(entry,"\n")
@@ -901,7 +962,9 @@ class floatSettings(object):
         self.label_8.setText(_translate("MainWindow", "Backup floating data to .SSG format so that it can be reimported as needed."))
 
         self.updateUclLabel()
-        
+    
+    
+
     
 
 
@@ -924,8 +987,8 @@ class floatSettings(object):
         print("ucl int: ",uclInt)
 
         
-        
-        with open("floatSettings.txt","w") as settingsFile:
+        cwd = os.getcwd()
+        with open(os.path.join(cwd,"Float Data\\floatSettings.txt"),"w") as settingsFile:
             
             
             settingsFile.write(str(uclInt))
@@ -933,21 +996,21 @@ class floatSettings(object):
         self.updateUclLabel()
 
     def updateUclLabel(self):
-
+        cwd = os.getcwd()
         try:
-            with open("floatSettings.txt","r") as settingsFile:
+            with open(os.path.join(cwd,"Float Data\\floatSettings.txt"),"r") as settingsFile:
                 
                 
                 lines = settingsFile.readlines()
                 print(lines)
             settingsFile.close()
         except FileNotFoundError:
-            with open("floatSettings.txt","w") as settingsFile:
+            with open(os.path.join(cwd,"Float Data\\floatSettings.txt"),"w") as settingsFile:
                 
                 
                 settingsFile.write("100")
             settingsFile.close()
-            with open("floatSettings.txt","r") as settingsFile:
+            with open(os.path.join(cwd,"Float Data\\floatSettings.txt"),"r") as settingsFile:
                 
                 
                 lines = settingsFile.readlines()
@@ -977,15 +1040,16 @@ class floatSettings(object):
 
     def backupFloatData(self,fileExportName):
         lines =[]
+        
         cwd = os.getcwd()
         print("cwd: ",cwd)
-        with open("floatData.txt","r") as floatData:
+        with open(os.path.join(cwd,"Float Data\\floatData.txt"),"r") as floatData:
             lines = floatData.readlines() 
         floatData.close()
 
         
 
-        with open(fileExportName,"wb") as outfile:
+        with open(os.path.join(cwd,"Backups\\",fileExportName),"wb") as outfile:
             pickle.dump(lines,outfile)
         outfile.close()
         self.createInfoMessage("Data Backup Succesful!","A backup had been created and saved with the Filename: '"+ str(fileExportName) +"' in directory: " +str(cwd) +"")
@@ -995,13 +1059,13 @@ class floatSettings(object):
         lines =[]
         cwd = os.getcwd()
         print("cwd: ",cwd)
-        with open("floatData.txt","r") as floatData:
+        with open(os.path.join(cwd,"Float Data\\floatData.txt"),"r") as floatData:
             lines = floatData.readlines() 
         floatData.close()
 
         #"floatDataExported.ssg"
 
-        with open(fileExportName,"wb") as outfile:
+        with open(os.path.join(cwd,"Exported Data\\",fileExportName),"wb") as outfile:
             pickle.dump(lines,outfile)
         outfile.close()
         self.createInfoMessage("Data Exported Succesfully!","File: '"+ str(fileExportName) +"' has been exported to directory: " +str(cwd) +"")
@@ -1045,8 +1109,8 @@ class floatSettings(object):
                 importedFile.close()
                 print(importedFileData)
                 print(type(importedFileData))
-                
-                with open("floatData.txt","w") as floatData:
+                cwd = os.getcwd()
+                with open(os.path.join(cwd,"Float Data\\floatData.txt"),"w") as floatData:
                     for line in importedFileData:
                         floatData.write(line)
                 floatData.close()
@@ -1062,7 +1126,9 @@ class floatSettings(object):
         else:
             self.createErrorMessage("Invalid Filetype!","This is an invalid filetype! Only '.ssg' files are accepeted!")
             return
-        
+
+    
+    
 
     def clearAllData(self):
         confirmDeleteMessagebox= QMessageBox()
@@ -1117,9 +1183,9 @@ class floatSettings(object):
 
                 self.exportFloatData(str(backupFileName))
                 
+                cwd = os.getcwd()
                 
-                
-                with open("floatData.txt","w") as floatData:
+                with open(os.path.join(cwd,"Float Data\\floatData.txt"),"w") as floatData:
                     floatData.write("")
                 floatData.close()
 
@@ -1235,9 +1301,9 @@ class sinkChooseGraphType(object):
 
         self.returnToSinkMenuButton.clicked.connect(self.backButtonPressed)
         
-        self.veiwLineGraphSinkButton.clicked.connect(self.veiwLineGraphPressed)
-        self.veiwBarGraphSinkButton.clicked.connect(self.veiwBarGraphPressed)
-        self.veiwLPercentageChangeSinkButton.clicked.connect(self.veiwSTDGraphPressed)
+        self.veiwLineGraphSinkButton.clicked.connect(lambda: self.veiwLineGraphPressed())
+        self.veiwBarGraphSinkButton.clicked.connect(lambda: self.veiwBarGraphPressed())
+        self.veiwLPercentageChangeSinkButton.clicked.connect(lambda: self.veiwSTDGraphPressed())
 
     #go back to add data point menu
     @staticmethod
@@ -1245,27 +1311,45 @@ class sinkChooseGraphType(object):
         runClass("SinkMainMenu")
     
     #veiw Linegraph
-    @staticmethod
+    
     def veiwLineGraphPressed(self):
-        csvMaker.create("sinkData.txt")
-        SSCFL.call()#six sigma calc float line graph    
+        csvMaker.create("1","sinkData.txt")
+        try:
+            csvMaker.create("1","sinkData.txt")
+        except:
+            self.createErrorMessage("Error!","Error occured while trying to load graph. Please ensure that you have a suffcient amount of data available to graph.")
+            return None
+        SSCSL.call()#six sigma calc sink line graph    
 
     #veiw BarGraph
-    @staticmethod
     def veiwBarGraphPressed(self):
-        print("hi")
-        csvMaker.create("sinkData.txt")
+        try:
+            csvMaker.create("1","sinkData.txt")
+        except:
+            self.createErrorMessage("Error!","Error occured while trying to load graph. Please ensure that you have a suffcient amount of data available to graph.")
+            return None
         SSCSB.call()#six sigma calc sink bar graph    
 
     #veiw std graph
-    @staticmethod
+
     def veiwSTDGraphPressed(self):
-        csvMaker.create("sinkData.txt")
-        SSCFPCC.call()#six sigma calc float bar graph    
+        try:
+            csvMaker.create("1","sinkData.txt")
+        except:
+            self.createErrorMessage("Error!","Error occured while trying to load graph. Please ensure that you have a suffcient amount of data available to graph.")
+            return None
+        SSCSPCC.call()#six sigma calc float bar graph    
 
 
 
-
+    #create error message based on input
+    def createErrorMessage(self,title,message):
+        errorMsg = QMessageBox()
+        errorMsg.setIcon(QMessageBox.Critical)
+        errorMsg.setText(title)
+        errorMsg.setInformativeText(message)
+        errorMsg.setWindowTitle(title)
+        errorMsg.exec()
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -1455,7 +1539,7 @@ class smmAddDP(object):
         self.quitToMenuButton.setGeometry(QtCore.QRect(30, 280, 271, 31))
         self.quitToMenuButton.setObjectName("quitToMenuButton")
         self.statusLabel = QtWidgets.QLabel(self.centralwidget)
-        self.statusLabel.setGeometry(QtCore.QRect(110, 10, 111, 20))
+        self.statusLabel.setGeometry(QtCore.QRect(60, 10, 221, 20))
         font = QtGui.QFont()
         font.setPointSize(10)
         self.statusLabel.setFont(font)
@@ -1480,6 +1564,10 @@ class smmAddDP(object):
 
         self.quitToMenuButton.clicked.connect(self.backButtonPressed)
         self.pushButton_2.clicked.connect(self.graphSelection)
+
+    
+
+
 
     #run graph selection class
     @staticmethod
@@ -1523,17 +1611,26 @@ class smmAddDP(object):
             sinkWeightFloat = float(sinkWeightString)
         except ValueError:
             self.createErrorMessage("Error!","Input for Sink Weight is Invalid!")
+            self.updateStatusLabel("red",False,str("ERROR: Sink weight Error!"))
             sinkErrorIn = True
         try:
             floatWeightFloat = float(floatWeightString)
         except ValueError:
             self.createErrorMessage("Error!","Input for Float Weight is Invalid!")
+            self.updateStatusLabel("red",False,str("ERROR: Float weight Error!"))
             floatErrorIn = True
+        if dateString == "":
+            self.createErrorMessage("Error!","Input for Date is Invalid!")
+            self.updateStatusLabel("red",False,str("ERROR: Date Error!"))
+            sinkErrorIn = True
+        
 
         if floatErrorIn != False or sinkErrorIn != False:
             print(floatErrorIn)
             print(sinkErrorIn)
             return None
+
+        
 
         print(dateString)
         print(sinkWeightFloat)
@@ -1542,7 +1639,11 @@ class smmAddDP(object):
         
         data = self.makeJsonData(dateString,sinkWeightFloat,floatWeightFloat)
         self.saveToJson(data)
+        self.updateStatusLabel("green",False,str("Point: "+str(dateString)+" added!"))
     
+    def updateStatusLabel(self,color,clear,text):
+        self.statusLabel.setText("<font color='"+color+"'>"+text+"</font>")
+
     #format data to json dict
     def makeJsonData(self,date,sinkWeight,floatWeight):
         
@@ -1552,7 +1653,8 @@ class smmAddDP(object):
         return data
     #save data
     def saveToJson(self,data):
-        with open('sinkData.txt', 'a') as file:
+        cwd = os.getcwd()
+        with open(os.path.join(cwd,"Sink Data\\sinkData.txt"),"a") as file:
             json.dump(data, file)
             file.write("\n")
 
@@ -1656,6 +1758,7 @@ class editSinkDataPoint(object):
         #maybe better than static for non class things?
         self.removeEntryButton.clicked.connect(lambda: self.removeEntryPressed(self.currentItem))
     
+    
 
 
     #return active item
@@ -1695,8 +1798,9 @@ class editSinkDataPoint(object):
         print("====================================")
 
         
-
-        with open(str(file),"r") as entryFile:
+        cwd = os.getcwd()
+        
+        with open(os.path.join(cwd,"Sink Data\\",str(file)),"r") as entryFile:
             for entry in entryFile.readlines():
                 dataLines.append(entry)
         entryFile.close
@@ -1714,9 +1818,9 @@ class editSinkDataPoint(object):
 
                 print("Lines: ",dataLines)
 
-                with open(str(file),"r") as entryFile:
+                with open(os.path.join(cwd,"Sink Data\\",str(file)),"r") as entryFile:
                     lines = entryFile.readlines()
-                with open(str(file),"w") as entryFile:
+                with open(os.path.join(cwd,"Sink Data\\",str(file)),"w") as entryFile:
                     for line in lines:
                         
                         if line != lineToExclude:
@@ -1771,7 +1875,8 @@ class editSinkDataPoint(object):
 
     def fillList(self,list):
         entries = []
-        with open(str(list),"r") as entryFile:
+        cwd = os.getcwd()
+        with open(os.path.join(cwd,"Sink Data\\",str(list)),"r") as entryFile:
             for entry in entryFile.readlines():
                 entries.append(entry)
                 print(entry,"\n")
@@ -1987,6 +2092,7 @@ class sinkSettings(object):
     
 
 
+
     @staticmethod
     def returnToMenuPressed(self):
         runClass("SinkMainMenu")
@@ -2006,8 +2112,8 @@ class sinkSettings(object):
         print("ucl int: ",uclInt)
 
         
-        
-        with open("sinkSettings.txt","w") as settingsFile:
+        cwd = os.getcwd()
+        with open(os.path.join(cwd,"Sink Data\\sinkSettings.txt"),"w") as settingsFile:
             
             
             settingsFile.write(str(uclInt))
@@ -2015,21 +2121,21 @@ class sinkSettings(object):
         self.updateUclLabel()
 
     def updateUclLabel(self):
-
+        cwd = os.getcwd()
         try:
-            with open("sinkSettings.txt","r") as settingsFile:
+            with open(os.path.join(cwd,"Sink Data\\sinkSettings.txt"),"r") as settingsFile:
                 
                 
                 lines = settingsFile.readlines()
                 print(lines)
             settingsFile.close()
         except FileNotFoundError:
-            with open("sinkSettings.txt","w") as settingsFile:
+            with open(os.path.join(cwd,"Sink Data\\sinkSettings.txt"),"w") as settingsFile:
                 
                 
                 settingsFile.write("100")
             settingsFile.close()
-            with open("sinkSettings.txt","r") as settingsFile:
+            with open(os.path.join(cwd,"Sink Data\\sinkSettings.txt"),"r") as settingsFile:
                 
                 
                 lines = settingsFile.readlines()
@@ -2061,32 +2167,32 @@ class sinkSettings(object):
         lines =[]
         cwd = os.getcwd()
         print("cwd: ",cwd)
-        with open("sinkData.txt","r") as floatData:
-            lines = floatData.readlines() 
-        floatData.close()
+        with open(os.path.join(cwd,"Sink Data\\sinkData.txt"),"r") as sinkData:
+            lines = sinkData.readlines() 
+        sinkData.close()
 
         
 
-        with open(fileExportName,"wb") as outfile:
+        with open(os.path.join(cwd,"Backups\\",fileExportName),"wb") as outfile:
             pickle.dump(lines,outfile)
         outfile.close()
-        self.createInfoMessage("Data Backup Succesful!","A backup had been created and saved with the Filename: '"+ str(fileExportName) +"' in directory: " +str(cwd) +"")
+        self.createInfoMessage("Data Backup Succesful!","A backup had been created and saved with the Filename: '"+ str(fileExportName) +"' in directory: " +str(cwd) +"\\Backups\\"+"")
 
 
     def exportSinkData(self,fileExportName):
         lines =[]
         cwd = os.getcwd()
         print("cwd: ",cwd)
-        with open("sinkData.txt","r") as sinkData:
+        with open(os.path.join(cwd,"Sink Data\\sinkData.txt"),"r") as sinkData:
             lines = sinkData.readlines() 
         sinkData.close()
 
         #"sinkDataExported.ssg"
 
-        with open(fileExportName,"wb") as outfile:
+        with open(os.path.join(cwd,"Exported Data\\",fileExportName),"wb") as outfile:
             pickle.dump(lines,outfile)
         outfile.close()
-        self.createInfoMessage("Data Exported Succesfully!","File: '"+ str(fileExportName) +"' has been exported to directory: " +str(cwd) +"")
+        self.createInfoMessage("Data Exported Succesfully!","File: '"+ str(fileExportName) +"' has been exported to directory: " + str(cwd) + "\\Exported Data\\"+"")
 
     def importSinkData(self):
         root = Tk()
@@ -2127,8 +2233,8 @@ class sinkSettings(object):
                 importedFile.close()
                 print(importedFileData)
                 print(type(importedFileData))
-                
-                with open("sinkData.txt","w") as sinkData:
+                cwd = os.getcwd()
+                with open(os.path.join(cwd,"Sink Data\\sinkData.txt"),"w") as sinkData:
                     for line in importedFileData:
                         sinkData.write(line)
                 sinkData.close()
@@ -2199,24 +2305,11 @@ class sinkSettings(object):
 
                 self.exportSinkData(str(backupFileName))
                 
+                cwd = os.getcwd()
                 
-                
-                with open("sinkData.txt","w") as sinkData:
+                with open(os.path.join(cwd,"Sink Data\\sinkData.txt"),"w") as sinkData:
                     sinkData.write("")
                 sinkData.close()
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
                 
                 
                 self.createInfoMessage("Data Deleted and Backup Created!","All exsiting data has been deleted. A backup of the data was saved to file '"+str(backupFileName)+"' before it was deleted.")
@@ -2254,8 +2347,6 @@ def runClass(name):
     className = eval(name)()
     className.setupUi(MainWindow)
     MainWindow.show
-
- 
 
 
 

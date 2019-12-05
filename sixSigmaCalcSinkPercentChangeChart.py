@@ -1,6 +1,8 @@
 import pandas,numpy,sys
+import tkinter as tk
+from tkinter import ttk
 from statistics import stdev
-import percentChangeGraphFloat
+import percentChangeGraphSink
 
 #################################################################################
 #init
@@ -70,18 +72,30 @@ def sinkPercent(totalL,sinkL):
 
 ###########################################################################
 
-def findAverage(floatPercents):# return average of list
-    itemCount =  len(floatPercents)
+def findAverage(sinkPercents):# return average of list
+    itemCount =  len(sinkPercents)
     total = 0
-    for percentage in floatPercents:
+    for percentage in sinkPercents:
         total = total + percentage
         
     average = total/itemCount
     print(average)
     return average
+def popupmsg(msg):
+    popup = tk.Tk()
+    popup.wm_title("!")
+    label = ttk.Label(popup, text=msg)
+    label.pack(side="top", fill="x", pady=10)
+    B1 = ttk.Button(popup, text="Close", command = popup.destroy)
+    B1.pack()
+    popup.mainloop()
 
-def standardDeviation(floatPercents):#return std of floats
-    std = stdev(floatPercents)
+
+def standardDeviation(sinkPercents):#return std of floats
+    
+    
+    std = stdev(sinkPercents)
+    
     print(std)
     return std
 
@@ -93,10 +107,17 @@ def findControlLimits(average,std,uclTarget,roundTo100):#return sigma count and 
         currentSigma = currentSigma + std
         sigmaCount = sigmaCount + 1
     
+   
     ucl = currentSigma
-    
+
+
+
     if roundTo100:
         ucl = round(ucl,0)
+    if sigmaCount < 3:
+        sigmaCount = 3
+
+
 
     for sigma in range(sigmaCount):
         lclAvg = lclAvg - std
@@ -115,9 +136,17 @@ def UCL(average,std,sigmas,roundTo100):#calc upper control sigmas is test. round
 
 
 def updateControls(uclTarget,roundTo100):
-    averageN = findAverage(floatPercents)
-    std = standardDeviation(floatPercents)
+    averageN = findAverage(sinkPercents)
+    std = standardDeviation(sinkPercents)
+    
+    with open("sinkSettings.txt","r") as settingsFile:
+        lines = settingsFile.readlines()
+        uclTarget = int(lines[0])
+
     ucl,lcl,sigmas = findControlLimits(averageN,std,uclTarget,roundTo100)
+
+   
+
 
     return sigmas,ucl,lcl,std
 
@@ -125,7 +154,7 @@ def updateControls(uclTarget,roundTo100):
 
 
 def call():
-    dataSet = getDataFrame("floating_data.csv")
+    dataSet = getDataFrame("sinking_data.csv")
     getDates()
     getSinkWeight()
     getFloatWeight()
@@ -133,9 +162,14 @@ def call():
     floatPercent(totalWeights,floatingWeights)
     sinkPercent(totalWeights,sinkingWeights)
     
-    average = findAverage(floatPercents)
+    average = findAverage(sinkPercents)
     
-    sigmas,ucl,lcl,std = updateControls(100,True)
-    
-    floatGraphs = percentChangeGraphFloat.PercentFloatGraph(3,ucl,lcl,average,floatPercents,sinkPercents,dates,std)
+    try:
+        sigmas,ucl,lcl,std = updateControls(100,True)
+    except:
+        popupmsg("Error! 2 or more values must be given to veiw this graph!")
+        return None
+
+
+    floatGraphs = percentChangeGraphSink.PercentSinkGraph(3,ucl,lcl,average,floatPercents,sinkPercents,dates,std)
 #call()

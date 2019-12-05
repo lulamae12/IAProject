@@ -1,6 +1,8 @@
 import pandas,numpy,sys
 from statistics import stdev
-import lineGraphFloat
+import lineGraphSink
+import tkinter as tk
+from tkinter import ttk
 #Things i need to calculate:
 # percent floating
 # percent sinking
@@ -58,7 +60,15 @@ def getSinkWeight():
     for items in dataSet:
         #print(items[2])
         sinkingWeights.append(items[1])
-
+def popupmsg(msg):
+    popup = tk.Tk()
+    popup.wm_title("!")
+    label = ttk.Label(popup, text=msg)
+    label.pack(side="top", fill="x", pady=10)
+    B1 = ttk.Button(popup, text="Close", command = popup.destroy)
+    B1.pack()
+    popup.mainloop()
+    
 def totalWeight(sinkL,floatL): #get total weight of sink weight and float weight and add to list
     del totalWeights[:]
     for i in range(len(sinkL)):
@@ -74,6 +84,8 @@ def floatPercent(totalL,floatL):
 def sinkPercent(totalL,sinkL):
     del sinkPercents[:]
     for i in range(len(sinkL)):
+        
+        print("IIIIIIIIIIIIIIII: ",i)
         sinkPercent = round((sinkL[i] / totalL[i]) * 100,1)
         sinkPercents.append(sinkPercent)
 
@@ -90,7 +102,7 @@ def findAverage(sinkPercents):# return average of list
     print(average)
     return average
 
-def standardDeviation(sinkPercents):#return std of floats
+def standardDeviation(sinkPercents):#return std of sinks
     std = stdev(sinkPercents)
     print(std)
     return std
@@ -99,12 +111,16 @@ def findControlLimits(average,std,uclTarget,roundTo100):#return sigma count and 
     currentSigma =  average
     lclAvg = average
     sigmaCount = 0
-
+    print("sigmaCount: ",sigmaCount)
     
     while currentSigma <= round(uclTarget,0):
         currentSigma = currentSigma + std
         sigmaCount = sigmaCount + 1
     
+    if sigmaCount < 3:
+        sigmaCount = 3
+
+
     ucl = uclTarget
     
     if roundTo100:
@@ -113,7 +129,7 @@ def findControlLimits(average,std,uclTarget,roundTo100):#return sigma count and 
     for sigma in range(sigmaCount):
         lclAvg = lclAvg - std
     lcl = lclAvg
-    
+    print("sigmaCount: ",sigmaCount)
     #ucl = 100
     
     return ucl,lcl,sigmaCount
@@ -153,8 +169,8 @@ def updateControls(uclTarget,roundTo100):
 
 
 
-def callLineGraphs(sigmas,ucl,lcl,average,floatPercents,sinkPercents,dates):
-    graphSink.plotGraphs(sigmas,ucl,lcl,average,floatPercents,sinkPercents,dates)
+#def callLineGraphs(sigmas,ucl,lcl,average,floatPercents,sinkPercents,dates):
+    #graphSink.plotGraphs(sigmas,ucl,lcl,average,floatPercents,sinkPercents,dates)
 
 
 
@@ -179,7 +195,11 @@ def call():
     
     average = findAverage(sinkPercents)
     
-    sigmas,ucl,lcl = updateControls(100,True)
+    try:
+        sigmas,ucl,lcl = updateControls(100,True)
+    except:
+        popupmsg("Error! 2 or more values must be given to veiw this graph!")
+        return None
     
     sinkGraphs = lineGraphSink.SinkGraphs(3,ucl,lcl,average,floatPercents,sinkPercents,dates)
     #floatGraphs.lineGraph()

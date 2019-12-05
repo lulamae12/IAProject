@@ -1,6 +1,8 @@
-import pandas,numpy,sys
+import pandas,numpy,sys,os
 from statistics import stdev
 import lineGraphFloat
+import tkinter as tk
+from tkinter import ttk
 #Things i need to calculate:
 # percent floating
 # percent sinking
@@ -24,6 +26,7 @@ dataSet = []
 def getDataFrame(fileName):
     global dataSet
     del dataSet[:]
+    cmd = os.getcwd()
     df = pandas.read_csv(fileName)
     print(df)
     dataset = df.values.tolist()
@@ -94,6 +97,14 @@ def standardDeviation(floatPercents):#return std of floats
     std = stdev(floatPercents)
     print(std)
     return std
+def popupmsg(msg):
+    popup = tk.Tk()
+    popup.wm_title("!")
+    label = ttk.Label(popup, text=msg)
+    label.pack(side="top", fill="x", pady=10)
+    B1 = ttk.Button(popup, text="Close", command = popup.destroy)
+    B1.pack()
+    popup.mainloop()
 
 def findControlLimits(average,std,uclTarget,roundTo100):#return sigma count and control limits based on how many stds to get to 100%
     currentSigma =  average
@@ -178,8 +189,11 @@ def call():
     sinkPercent(totalWeights,sinkingWeights)
     
     average = findAverage(floatPercents)
-    
-    sigmas,ucl,lcl = updateControls(100,True)
+    try:
+        sigmas,ucl,lcl = updateControls(100,True)
+    except:
+        popupmsg("Error! 2 or more values must be given to veiw this graph!")
+        return None
     
     floatGraphs = lineGraphFloat.FloatGraphs(3,ucl,lcl,average,floatPercents,sinkPercents,dates)
     #floatGraphs.lineGraph()

@@ -5,9 +5,10 @@ from datetime import datetime
 from matplotlib.widgets import Button,Slider
 import matplotlib.patches as patches
 
-class PercentFloatGraph(object):
+class PercentSinkGraph(object):
     def __init__(self,sigmas,ucl,lcl,average,floatPercents,sinkPercents,dates,std):
         self.sigmas = sigmas
+
         self.ucl = ucl
         self.std = std  
         self.lcl = lcl
@@ -18,8 +19,8 @@ class PercentFloatGraph(object):
         self.floatPercents = floatPercents
         self.sinkPercents = sinkPercents
         self.dates = dates
-        self.floatPercentsMin = self.listMin(floatPercents)
-        self.floatPercentsMax = self.listMax(floatPercents)
+        self.sinkPercentsMin = self.listMin(sinkPercents)
+        self.sinkPercentsMax = self.listMax(sinkPercents)
         self.percentDevGraph()
     def listMin(self,list):
         print(min(list))
@@ -28,17 +29,17 @@ class PercentFloatGraph(object):
         print(max(list))
         return max(list)
     
-    def returnYLims(self,ucl,lcl,floatPercentsMin,floatPercentsMax):
+    def returnYLims(self,ucl,lcl,sinkPercentsMin,sinkPercentsMax):
         lowerYLim = 0
         upperYLim = 0
-        if lcl < floatPercentsMin:
+        if lcl < sinkPercentsMin:
             lowerYLim = lcl
         else:
-            lowerYLim = floatPercentsMin    
-        if ucl > floatPercentsMax:
+            lowerYLim = sinkPercentsMin    
+        if ucl > sinkPercentsMax:
             upperYLim = ucl
         else:
-            upperYLim = floatPercentsMax
+            upperYLim = sinkPercentsMax
 
         return lowerYLim,upperYLim
     
@@ -49,7 +50,7 @@ class PercentFloatGraph(object):
         return dateList
     def percentDevGraph(self):
         
-        y = np.array(self.floatPercents,float)
+        y = np.array(self.sinkPercents,float)
         x = np.array(len(self.dates))
         
         fig, ax = plt.subplots(figsize=(8,6.6))
@@ -59,14 +60,19 @@ class PercentFloatGraph(object):
         plt.ylabel("Deviations from mean")
 
 
-        plt.title("Floating Percent Deviations From Mean")
+        plt.title("Sinking Percent Deviations From Mean")
 
         #setup graph limits
-        yLimLow,yLimHigh = self.returnYLims(self.ucl,self.lcl,self.floatPercentsMin,self.floatPercentsMax)
+        yLimLow,yLimHigh = self.returnYLims(self.ucl,self.lcl,self.sinkPercentsMin,self.sinkPercentsMax)
         plt.ylim(yLimLow - 1,yLimHigh + 1)
 
+        with open("sinkSettings.txt","r") as settingsFile:
+            lines = settingsFile.readlines()
+            self.ucl = int(lines[0])
+
+
         meanPatch = patches.Patch(color = "red",label="Mean = "+str(round(self.average,1)))
-        perPatch = patches.Patch(color="blue",label="Float Percentage")
+        perPatch = patches.Patch(color="blue",label="Sinking Percentage")
         uclPatch = patches.Patch(color = "green",label="UCL = "+str(round(self.ucl,1)))
         lclPatch = patches.Patch(color = "orange",label="LCL = "+str(round(self.lcl,1)))
 
@@ -76,7 +82,7 @@ class PercentFloatGraph(object):
         
         plt.axhline(self.ucl, color='green', linestyle='--')#plot ucl line
         
-
+       
 
 
         oneSig = self.average + self.std
@@ -97,8 +103,13 @@ class PercentFloatGraph(object):
         # rotate and align the tick labels so they look better
         plt.gcf().autofmt_xdate()
 
-        
-        li = plt.stem([0,1,2,3,4,5,6,7,8,9,10],y,markerfmt='h', bottom=self.average,linefmt="grey")
+        xList = []
+        for i in range(len(dateList)):
+            xList.append(i)
+        print(xList)
+
+
+        li = plt.stem(xList,y,markerfmt='h', bottom=self.average,linefmt="grey")
         
         plt.ylim(self.lcl - 1,self.ucl+1)
  
