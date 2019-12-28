@@ -486,6 +486,10 @@ class fmmAddDP(object):
             self.createErrorMessage("Error!","Input for Float Weight is Invalid!")
             floatErrorIn = True
             self.updateStatusLabel("red",False,str("ERROR: Float weight Error!"))
+        if dateString == "" or re.search('[a-zA-Z]', dateString):
+            self.createErrorMessage("Error!","Input for Date is Invalid!")
+            self.updateStatusLabel("red",False,str("ERROR: Date Error!"))
+            sinkErrorIn = True
         if floatErrorIn != False or sinkErrorIn != False:
             print(floatErrorIn)
             print(sinkErrorIn)
@@ -1619,7 +1623,7 @@ class smmAddDP(object):
             self.createErrorMessage("Error!","Input for Float Weight is Invalid!")
             self.updateStatusLabel("red",False,str("ERROR: Float weight Error!"))
             floatErrorIn = True
-        if dateString == "":
+        if dateString == "" or re.search('[a-zA-Z]', dateString):
             self.createErrorMessage("Error!","Input for Date is Invalid!")
             self.updateStatusLabel("red",False,str("ERROR: Date Error!"))
             sinkErrorIn = True

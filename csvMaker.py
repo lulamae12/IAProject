@@ -122,9 +122,7 @@ def createCSVFile(mode,dataList):
 
 
 
-def readCsv(fileName):
-    dataframe = pandas.read_csv(fileName)
-    print(dataframe)
+
 
 
 
@@ -132,6 +130,6 @@ def create(mode,fileName):
     dataSet = getDataSet(mode,fileName)
     createCSVFile(mode,dataSet)
     
-    readCsv(fileName)
+    #readCsv(fileName)
 
 #def calculateAverage():

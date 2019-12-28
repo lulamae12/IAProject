@@ -26,8 +26,8 @@ dataSet = []
 def getDataFrame(fileName):
     global dataSet
     del dataSet[:]
-    cmd = os.getcwd()
-    df = pandas.read_csv(fileName)
+    cwd = os.getcwd()
+    df = pandas.read_csv(os.path.join(cwd,"Float Data\\",fileName))
     print(df)
     dataset = df.values.tolist()
     for item in dataset:

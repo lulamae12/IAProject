@@ -1,4 +1,4 @@
-import pandas,numpy,sys
+import pandas,numpy,sys,os
 import tkinter as tk
 from tkinter import ttk
 from statistics import stdev
@@ -20,7 +20,8 @@ dataSet = []
 def getDataFrame(fileName):
     global dataSet
     del dataSet[:]
-    df = pandas.read_csv(fileName)
+    cwd = os.getcwd()
+    df = pandas.read_csv(os.path.join(cwd,"Sink Data\\",fileName))
     print(df)
     dataset = df.values.tolist()
     for item in dataset:
