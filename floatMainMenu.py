@@ -8,35 +8,31 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import sys
 
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(417, 542)
+        MainWindow.resize(294, 387)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.veiwGraphButton = QtWidgets.QPushButton(self.centralwidget)
-        self.veiwGraphButton.setGeometry(QtCore.QRect(80, 340, 260, 31))
+        self.veiwGraphButton.setGeometry(QtCore.QRect(20, 110, 260, 31))
         self.veiwGraphButton.setObjectName("veiwGraphButton")
-        self.addDataPointButton = QtWidgets.QPushButton(self.centralwidget)
-        self.addDataPointButton.setGeometry(QtCore.QRect(80, 300, 260, 31))
-        self.addDataPointButton.setObjectName("addDataPointButton")
         self.settingsButton = QtWidgets.QPushButton(self.centralwidget)
-        self.settingsButton.setGeometry(QtCore.QRect(80, 420, 131, 31))
+        self.settingsButton.setGeometry(QtCore.QRect(20, 190, 260, 31))
         self.settingsButton.setObjectName("settingsButton")
         self.quitToSelectButton = QtWidgets.QPushButton(self.centralwidget)
-        self.quitToSelectButton.setGeometry(QtCore.QRect(210, 420, 131, 31))
+        self.quitToSelectButton.setGeometry(QtCore.QRect(150, 230, 131, 31))
         self.quitToSelectButton.setObjectName("quitToSelectButton")
         self.editDataPointButton = QtWidgets.QPushButton(self.centralwidget)
-        self.editDataPointButton.setGeometry(QtCore.QRect(80, 380, 260, 31))
+        self.editDataPointButton.setGeometry(QtCore.QRect(20, 150, 260, 31))
         self.editDataPointButton.setObjectName("editDataPointButton")
         self.addNewDPandGraphButton = QtWidgets.QPushButton(self.centralwidget)
-        self.addNewDPandGraphButton.setGeometry(QtCore.QRect(80, 260, 260, 31))
+        self.addNewDPandGraphButton.setGeometry(QtCore.QRect(20, 70, 260, 31))
         self.addNewDPandGraphButton.setObjectName("addNewDPandGraphButton")
         self.line = QtWidgets.QFrame(self.centralwidget)
-        self.line.setGeometry(QtCore.QRect(80, 220, 260, 31))
+        self.line.setGeometry(QtCore.QRect(20, 40, 260, 31))
         font = QtGui.QFont()
         font.setBold(False)
         font.setWeight(50)
@@ -47,14 +43,17 @@ class Ui_MainWindow(object):
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
         self.line.setObjectName("line")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(150, 200, 121, 31))
+        self.label.setGeometry(QtCore.QRect(90, 20, 121, 31))
         font = QtGui.QFont()
         font.setPointSize(15)
         self.label.setFont(font)
         self.label.setObjectName("label")
+        self.helpMenuButton = QtWidgets.QPushButton(self.centralwidget)
+        self.helpMenuButton.setGeometry(QtCore.QRect(20, 230, 128, 31))
+        self.helpMenuButton.setObjectName("helpMenuButton")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 417, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 294, 21))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -68,19 +67,19 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.veiwGraphButton.setText(_translate("MainWindow", "Veiw Graphs"))
-        self.addDataPointButton.setText(_translate("MainWindow", "Add New Data Point"))
         self.settingsButton.setText(_translate("MainWindow", "Settings"))
         self.quitToSelectButton.setText(_translate("MainWindow", "Quit to Select"))
         self.editDataPointButton.setText(_translate("MainWindow", "Veiw And Edit Data Points"))
         self.addNewDPandGraphButton.setText(_translate("MainWindow", "Add New Data Point and Graph"))
         self.label.setText(_translate("MainWindow", "Floating Data"))
+        self.helpMenuButton.setText(_translate("MainWindow", "Help Menu"))
 
 
-#def run():
-
-app = QtWidgets.QApplication(sys.argv)
-MainWindow = QtWidgets.QMainWindow()
-ui = Ui_MainWindow()
-ui.setupUi(MainWindow)
-
-
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec_())
