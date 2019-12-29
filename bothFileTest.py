@@ -15,6 +15,9 @@ import sinkingFileClass as SFC
 from tkinter import *
 from tkinter.filedialog import askopenfilename
 
+import numpy.core._methods #For cxfreeze
+import numpy.lib.format #For cxfreeze
+import matplotlib.backends.backend_tkagg #For cxfreeze
 
 
 class LaunchWindow(object):

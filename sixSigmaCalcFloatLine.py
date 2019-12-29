@@ -188,11 +188,16 @@ def call():
     floatPercent(totalWeights,floatingWeights)
     sinkPercent(totalWeights,sinkingWeights)
     
-    average = findAverage(floatPercents)
+    try:
+        average = findAverage(floatPercents)
+    except ZeroDivisionError:
+        popupmsg("Error! 2 or more values must be given to view this graph!")
+        return None
+
     try:
         sigmas,ucl,lcl = updateControls(100,True)
     except:
-        popupmsg("Error! 2 or more values must be given to veiw this graph!")
+        popupmsg("Error! 2 or more values must be given to view this graph!")
         return None
     
     floatGraphs = lineGraphFloat.FloatGraphs(3,ucl,lcl,average,floatPercents,sinkPercents,dates)

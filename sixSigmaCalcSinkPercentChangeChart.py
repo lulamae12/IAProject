@@ -163,7 +163,11 @@ def call():
     floatPercent(totalWeights,floatingWeights)
     sinkPercent(totalWeights,sinkingWeights)
     
-    average = findAverage(sinkPercents)
+    try:
+        average = findAverage(sinkPercents)
+    except ZeroDivisionError:
+        popupmsg("Error! 2 or more values must be given to view this graph!")
+        return None
     
     try:
         sigmas,ucl,lcl,std = updateControls(100,True)
