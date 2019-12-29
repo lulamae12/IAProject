@@ -17,7 +17,6 @@ from tkinter.filedialog import askopenfilename
 
 
 
-
 class LaunchWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
