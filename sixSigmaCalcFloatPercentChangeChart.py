@@ -92,7 +92,14 @@ def popupmsg(msg):
     popup.mainloop()
 
 def standardDeviation(floatPercents):#return std of floats
-    std = stdev(floatPercents)
+    #check if all items in list are the same value
+    if floatPercents.count(floatPercents[0]) == len(floatPercents):
+        print("all the same")
+        floatPercents[0] = floatPercents[0] + 0.1
+        print(floatPercents[0])
+    std = stdev(floatPercents)    
+
+    popupmsg("STD is ~ 0. Please verify your data is correct")
     print(std)
     return std
 

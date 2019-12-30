@@ -22,8 +22,9 @@ import matplotlib.backends.backend_tkagg #For cxfreeze
 
 class LaunchWindow(object):
     def setupUi(self, MainWindow):
+        
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(338, 246)
+        MainWindow.resize(338, 252)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
@@ -44,6 +45,13 @@ class LaunchWindow(object):
         self.quitButton = QtWidgets.QPushButton(self.centralwidget)
         self.quitButton.setGeometry(QtCore.QRect(50, 130, 241, 41))
         self.quitButton.setObjectName("quitButton")
+        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_2.setGeometry(QtCore.QRect(50, 190, 241, 16))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.label_2.setFont(font)
+        self.label_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_2.setObjectName("label_2")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 338, 21))
@@ -56,6 +64,8 @@ class LaunchWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         
+        self.firstTimeSetupCheck()
+
         self.launchButton.clicked.connect(self.floatPressed)
 
         self.quitButton.clicked.connect(self.quitProgram)
@@ -66,9 +76,25 @@ class LaunchWindow(object):
         self.label.setText(_translate("MainWindow", "Six Sigma Grapher"))
         self.launchButton.setText(_translate("MainWindow", "Launch"))
         self.quitButton.setText(_translate("MainWindow", "Quit"))
+        self.label_2.setText(_translate("MainWindow", "Created by Thomas Smith"))
+
+    def firstTimeSetupCheck(self):
+        dirList = ["Float Data","Backups","Sink Data","Exported Data"]
+        for dirr in dirList:
+            print(dirr)
+            try:
+                if (os.path.isfile(dirr) == False):
+                    os.mkdir(dirr)
+                    print("made, ",dirr," in ",os.getcwd())
+            except FileExistsError:
+                pass
+
+
 
     @staticmethod
     def floatPressed(self):
+        
+        
         runClass("floatOrSinkMenu")
 
     @staticmethod
@@ -1123,7 +1149,7 @@ class floatSettings(object):
         with open(os.path.join(cwd,"Backups\\",fileExportName),"wb") as outfile:
             pickle.dump(lines,outfile)
         outfile.close()
-        self.createInfoMessage("Data Backup Succesful!","A backup had been created and saved with the Filename: '"+ str(fileExportName) +"' in directory: " +str(cwd) +"")
+        self.createInfoMessage("Data Backup Succesful!","A backup had been created and saved with the Filename: '"+ str(fileExportName) +"' in directory: " +str(cwd) +"\\Backups")
 
 
     def exportFloatData(self,fileExportName):
@@ -1139,7 +1165,7 @@ class floatSettings(object):
         with open(os.path.join(cwd,"Exported Data\\",fileExportName),"wb") as outfile:
             pickle.dump(lines,outfile)
         outfile.close()
-        self.createInfoMessage("Data Exported Succesfully!","File: '"+ str(fileExportName) +"' has been exported to directory: " +str(cwd) +"")
+        self.createInfoMessage("Data Exported Succesfully!","File: '"+ str(fileExportName) +"' has been exported to directory: " +str(cwd) +"\\Exported Data")
 
     def importFloatData(self):
         root = Tk()
@@ -1260,7 +1286,7 @@ class floatSettings(object):
                     floatData.write("")
                 floatData.close()
 
-                self.createInfoMessage("Data Deleted and Backup Created!","All exsiting data has been deleted. A backup of the data was saved to file '"+str(backupFileName)+"' before it was deleted.")
+                self.createInfoMessage("Data Deleted and Backup Created!","All exsiting data has been deleted. A backup of the data was saved to folder ExportedData called '"+str(backupFileName)+"' before it was deleted.")
     
     
     def createFloatBackup(self):

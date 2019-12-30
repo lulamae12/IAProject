@@ -104,7 +104,14 @@ def findAverage(sinkPercents):# return average of list
     return average
 
 def standardDeviation(sinkPercents):#return std of sinks
-    std = stdev(sinkPercents)
+    #check if all items in list are the same value
+    if floatPercents.count(floatPercents[0]) == len(floatPercents):
+        print("all the same")
+        floatPercents[0] = floatPercents[0] + 0.1
+        print(floatPercents[0])
+    std = stdev(floatPercents)    
+
+    popupmsg("STD is ~ 0. Please verify your data is correct")
     print(std)
     return std
 

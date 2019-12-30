@@ -71,9 +71,13 @@ def floatPercent(totalL,floatL):
     
     del floatPercents[:]
     for i in range(len(floatL)):
+        #PROBLEM IS HERE SOMEWHERE
+        print(floatL[i])
+        print(totalL[i])
         floatPercent = round((floatL[i] / totalL[i]) * 100,1)
         floatPercents.append(floatPercent)
-        
+        print("floatPercent def ",floatPercent)
+    print(floatPercents)
 def sinkPercent(totalL,sinkL):
     del sinkPercents[:]
     for i in range(len(sinkL)):
@@ -94,8 +98,19 @@ def findAverage(floatPercents):# return average of list
     return average
 
 def standardDeviation(floatPercents):#return std of floats
-    std = stdev(floatPercents)
-    print(std)
+
+    #check if all items in list are the same value
+    if floatPercents.count(floatPercents[0]) == len(floatPercents):
+        print("all the same")
+        floatPercents[0] = floatPercents[0] + 0.1
+        print(floatPercents[0])
+    std = stdev(floatPercents)    
+
+    popupmsg("STD is ~ 0. Please verify your data is correct")
+
+    print(floatPercents)
+    print("std func",std)
+    
     return std
 def popupmsg(msg):
     popup = tk.Tk()
@@ -110,11 +125,16 @@ def findControlLimits(average,std,uclTarget,roundTo100):#return sigma count and 
     currentSigma =  average
     lclAvg = average
     sigmaCount = 0
-
     
+    
+    #gets stuck here
     while currentSigma <= round(uclTarget,0):
+        print("ucl targee",round(uclTarget,0))
+        print("Current sigma",currentSigma)
+        print("std",std)
         currentSigma = currentSigma + std
         sigmaCount = sigmaCount + 1
+        
     
     ucl = uclTarget
     
@@ -142,6 +162,7 @@ def UCL(average,std,sigmas,roundTo100):#calc upper control sigmas is test. round
 
 #def LCL(average,std):#calc lower control sigmas is test
 def updateControls(uclTarget,roundTo100):
+    print("float percent",floatPercents)
     averageN = findAverage(floatPercents)
     std = standardDeviation(floatPercents)
     
@@ -193,10 +214,13 @@ def call():
     except ZeroDivisionError:
         popupmsg("Error! 2 or more values must be given to view this graph!")
         return None
-
+    
     try:
+       
         sigmas,ucl,lcl = updateControls(100,True)
+        
     except:
+        
         popupmsg("Error! 2 or more values must be given to view this graph!")
         return None
     
