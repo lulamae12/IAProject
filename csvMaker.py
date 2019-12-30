@@ -17,6 +17,13 @@ def getDataSet(mode,fileName):
     floatV = ""
     cwd = os.getcwd()
     if mode == "0":    
+        if os.path.exists(os.path.join(cwd,"Float Data\\",fileName)):
+            pass
+        else:
+            with open(os.path.join(cwd,"Float Data\\",fileName),"w+") as dfile:
+                dfile.write("")    
+            dfile.close()
+        
         with open(os.path.join(cwd,"Float Data\\",fileName),"r") as dataSetFile:
             for entry in dataSetFile.readlines():
                 entry = entry.replace("\n","")
@@ -36,6 +43,13 @@ def getDataSet(mode,fileName):
     
     
     elif mode == "1":    
+        if os.path.exists(os.path.join(cwd,"Sink Data\\",fileName)):
+            pass
+        else:
+            with open(os.path.join(cwd,"Sink Data\\",fileName),"w+") as dfile:
+                dfile.write("")    
+            dfile.close()
+        
         with open(os.path.join(cwd,"Sink Data\\",fileName),"r") as dataSetFile:
             for entry in dataSetFile.readlines():
                 entry = entry.replace("\n","")
