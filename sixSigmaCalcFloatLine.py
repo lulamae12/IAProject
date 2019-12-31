@@ -103,10 +103,10 @@ def standardDeviation(floatPercents):#return std of floats
     if floatPercents.count(floatPercents[0]) == len(floatPercents):
         
         floatPercents[0] = floatPercents[0] + 0.1
-        
+        popupmsg("STD is ~ 0. Please verify your data is correct")
     std = stdev(floatPercents)    
 
-    popupmsg("STD is ~ 0. Please verify your data is correct")
+    
 
     print(floatPercents)
     print("std func",std)

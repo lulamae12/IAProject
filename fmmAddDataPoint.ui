@@ -245,6 +245,15 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <tabstops>
+  <tabstop>sinkingWeightTextBox</tabstop>
+  <tabstop>floatingWeightTextBox</tabstop>
+  <tabstop>dateTextBox</tabstop>
+  <tabstop>useCurrentDatecheckBox</tabstop>
+  <tabstop>quitToMenuButton</tabstop>
+  <tabstop>pushButton</tabstop>
+  <tabstop>pushButton_2</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

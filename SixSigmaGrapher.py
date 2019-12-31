@@ -318,15 +318,15 @@ class floatChooseGraphType(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Float Data - Choose Graph"))
-        self.veiwLineGraphFloatButton.setText(_translate("MainWindow", "Veiw Floating Percentage Data Line Graph"))
+        self.veiwLineGraphFloatButton.setText(_translate("MainWindow", "View Floating Percentage Data Line Graph"))
         self.label.setText(_translate("MainWindow", "Default graph. Contains UCL and LCL data for floating data percentages in a detailed line graph"))
-        self.veiwBarGraphFloatButton.setText(_translate("MainWindow", "Veiw Floating Distribution Bar Graph"))
+        self.veiwBarGraphFloatButton.setText(_translate("MainWindow", "View Floating Distribution Bar Graph"))
         self.label_2.setText(_translate("MainWindow", "Bar graph that shows the distribution of the percent of floating plastic versus the sinking plastic percentage."))
-        self.veiwLPercentageChangeFloatButton.setText(_translate("MainWindow", "Veiw Floating Percentage Deviation Graph"))
-        self.label_3.setText(_translate("MainWindow", "Graph that shows distrubitons from the mean of the dataset. Can be used as another way to analyze data from the line graph."))
+        self.veiwLPercentageChangeFloatButton.setText(_translate("MainWindow", "View Floating Percentage Deviation Graph"))
+        self.label_3.setText(_translate("MainWindow", "Graph that shows distributions from the mean of the dataset. Can be used as another way to analyze data from the line graph."))
         self.returnToFloatMenuButton.setText(_translate("MainWindow", "Return to Float menu"))
         self.label_4.setText(_translate("MainWindow", "Return to previous menu."))
-        self.label_5.setText(_translate("MainWindow", "How would you like to veiw your data?"))
+        self.label_5.setText(_translate("MainWindow", "How would you like to view your data?"))
 
 
 #main menu for float data
@@ -433,10 +433,10 @@ class floatMainMenu(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Float Data - Main Menu"))
-        self.viewGraphButton.setText(_translate("MainWindow", "view Graphs"))
+        self.viewGraphButton.setText(_translate("MainWindow", "View Graphs"))
         self.settingsButton.setText(_translate("MainWindow", "Settings"))
         self.quitToSelectButton.setText(_translate("MainWindow", "Quit to Select"))
-        self.editDataPointButton.setText(_translate("MainWindow", "view And Edit Data Points"))
+        self.editDataPointButton.setText(_translate("MainWindow", "View and Edit Data Points"))
         self.addNewDPandGraphButton.setText(_translate("MainWindow", "Add New Data Point"))
         self.label.setText(_translate("MainWindow", "Floating Data"))
         self.helpMenuButton.setText(_translate("MainWindow", "Help Menu"))
@@ -453,10 +453,10 @@ class fmmAddDP(object):
         MainWindow.setFont(font)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.sinkingWeightTextBox = QtWidgets.QTextEdit(self.centralwidget)
+        self.sinkingWeightTextBox = QtWidgets.QLineEdit(self.centralwidget)
         self.sinkingWeightTextBox.setEnabled(True)
         self.sinkingWeightTextBox.setGeometry(QtCore.QRect(220, 70, 111, 21))
-        self.sinkingWeightTextBox.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        #self.sinkingWeightTextBox.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.sinkingWeightTextBox.setObjectName("sinkingWeightTextBox")
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(30, 60, 171, 41))
@@ -467,10 +467,10 @@ class fmmAddDP(object):
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(30, 90, 151, 41))
         self.label_2.setObjectName("label_2")
-        self.floatingWeightTextBox = QtWidgets.QTextEdit(self.centralwidget)
+        self.floatingWeightTextBox = QtWidgets.QLineEdit(self.centralwidget)
         self.floatingWeightTextBox.setEnabled(True)
         self.floatingWeightTextBox.setGeometry(QtCore.QRect(220, 100, 111, 21))
-        self.floatingWeightTextBox.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        #self.floatingWeightTextBox.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.floatingWeightTextBox.setObjectName("floatingWeightTextBox")
         self.useCurrentDatecheckBox = QtWidgets.QCheckBox(self.centralwidget)
         self.useCurrentDatecheckBox.setGeometry(QtCore.QRect(30, 160, 171, 20))
@@ -479,10 +479,10 @@ class fmmAddDP(object):
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
         self.label_3.setGeometry(QtCore.QRect(30, 120, 181, 41))
         self.label_3.setObjectName("label_3")
-        self.dateTextBox = QtWidgets.QTextEdit(self.centralwidget)
+        self.dateTextBox = QtWidgets.QLineEdit(self.centralwidget)
         self.dateTextBox.setEnabled(True)
         self.dateTextBox.setGeometry(QtCore.QRect(220, 130, 111, 21))
-        self.dateTextBox.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        #self.dateTextBox.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.dateTextBox.setObjectName("dateTextBox")
         #get date and disable date box
         self.dateTextBox.setDisabled(True)
@@ -527,6 +527,7 @@ class fmmAddDP(object):
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
+
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         
@@ -569,9 +570,9 @@ class fmmAddDP(object):
         if self.useCurrentDatecheckBox.isChecked():
             dateString = str(self.currentDateFormatted())
         else:
-            dateString = self.dateTextBox.toPlainText()
-        sinkWeightString = self.sinkingWeightTextBox.toPlainText()
-        floatWeightString = self.floatingWeightTextBox.toPlainText()
+            dateString = self.dateTextBox.text()
+        sinkWeightString = self.sinkingWeightTextBox.text()
+        floatWeightString = self.floatingWeightTextBox.text()
 
         sinkErrorIn = False
         floatErrorIn = False
@@ -650,7 +651,7 @@ class fmmAddDP(object):
         self.label_3.setText(_translate("MainWindow", "Date ( MM/DD/YYYY) :"))
         
         self.pushButton.setText(_translate("MainWindow", "Add data point"))
-        self.pushButton_2.setText(_translate("MainWindow", "Veiw Graphs"))
+        self.pushButton_2.setText(_translate("MainWindow", "View Graphs"))
         self.label_4.setText(_translate("MainWindow", "Add Float Data point"))
         self.quitToMenuButton.setText(_translate("MainWindow", "Return to menu"))
     
@@ -819,6 +820,8 @@ class editFloatDataPoint(object):
         alertMsg.exec()
 
     @staticmethod
+
+    
     def returnToMenuPressed(self):
         runClass("floatMainMenu")
 
@@ -1451,7 +1454,7 @@ class floatHelpMenu(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">To reset all floating data, follow these instructions.</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">1. Click the button labeled &quot;Reset All Floating Data&quot;.</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">2. Confirm that you would like to proceed.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">3. Confirm your confirmation.</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">3. Confim your confirmation.</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">4. A safety backup will be created and all existing data will be destroyed.</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\"> </span></p>\n"
@@ -1624,15 +1627,15 @@ class sinkChooseGraphType(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Sink Data - Choose Graph"))
-        self.veiwLineGraphSinkButton.setText(_translate("MainWindow", "Veiw Sinking Percentage Data Line Graph"))
+        self.veiwLineGraphSinkButton.setText(_translate("MainWindow", "View Sinking Percentage Data Line Graph"))
         self.label.setText(_translate("MainWindow", "Default graph. Contains UCL and LCL data for sinking data percentages in a detailed line graph"))
-        self.veiwBarGraphSinkButton.setText(_translate("MainWindow", "Veiw Sinking Distribution Bar Graph"))
+        self.veiwBarGraphSinkButton.setText(_translate("MainWindow", "View Sinking Distribution Bar Graph"))
         self.label_2.setText(_translate("MainWindow", "Bar graph that shows the distribution of the percent of sinking plastic versus the floating plastic percentage."))
         self.veiwLPercentageChangeSinkButton.setText(_translate("MainWindow", "Veiw Sinking Percentage Deviation Graph"))
-        self.label_3.setText(_translate("MainWindow", "Graph that shows distrubitons from the mean of the dataset. Can be used as another way to analyze data from the line graph."))
+        self.label_3.setText(_translate("MainWindow", "Graph that shows distributions from the mean of the dataset. Can be used as another way to analyze data from the line graph."))
         self.returnToSinkMenuButton.setText(_translate("MainWindow", "Return to Sink menu"))
         self.label_4.setText(_translate("MainWindow", "Return to previous menu."))
-        self.label_5.setText(_translate("MainWindow", "How would you like to veiw your data?"))
+        self.label_5.setText(_translate("MainWindow", "How would you like to view your data?"))
 
 
 #main menu for Sink data
@@ -1737,10 +1740,10 @@ class SinkMainMenu(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Sink Data - Main Menu"))
-        self.viewGraphButton.setText(_translate("MainWindow", "view Graphs"))
+        self.viewGraphButton.setText(_translate("MainWindow", "View Graphs"))
         self.settingsButton.setText(_translate("MainWindow", "Settings"))
         self.quitToSelectButton.setText(_translate("MainWindow", "Quit to Select"))
-        self.editDataPointButton.setText(_translate("MainWindow", "view And Edit Data Points"))
+        self.editDataPointButton.setText(_translate("MainWindow", "View and Edit Data Points"))
         self.addNewDPandGraphButton.setText(_translate("MainWindow", "Add New Data Point"))
         self.label.setText(_translate("MainWindow", "Sinking Data"))
         self.helpMenuButton.setText(_translate("MainWindow", "Help Menu"))
@@ -1757,10 +1760,10 @@ class smmAddDP(object):
         MainWindow.setFont(font)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.sinkingWeightTextBox = QtWidgets.QTextEdit(self.centralwidget)
+        self.sinkingWeightTextBox = QtWidgets.QLineEdit(self.centralwidget)
         self.sinkingWeightTextBox.setEnabled(True)
         self.sinkingWeightTextBox.setGeometry(QtCore.QRect(220, 70, 111, 21))
-        self.sinkingWeightTextBox.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        #self.sinkingWeightTextBox.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.sinkingWeightTextBox.setObjectName("sinkingWeightTextBox")
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(30, 60, 171, 41))
@@ -1771,10 +1774,10 @@ class smmAddDP(object):
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(30, 90, 151, 41))
         self.label_2.setObjectName("label_2")
-        self.floatingWeightTextBox = QtWidgets.QTextEdit(self.centralwidget)
+        self.floatingWeightTextBox = QtWidgets.QLineEdit(self.centralwidget)
         self.floatingWeightTextBox.setEnabled(True)
         self.floatingWeightTextBox.setGeometry(QtCore.QRect(220, 100, 111, 21))
-        self.floatingWeightTextBox.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        #self.floatingWeightTextBox.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.floatingWeightTextBox.setObjectName("floatingWeightTextBox")
         self.useCurrentDatecheckBox = QtWidgets.QCheckBox(self.centralwidget)
         self.useCurrentDatecheckBox.setGeometry(QtCore.QRect(30, 160, 171, 20))
@@ -1783,10 +1786,10 @@ class smmAddDP(object):
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
         self.label_3.setGeometry(QtCore.QRect(30, 120, 181, 41))
         self.label_3.setObjectName("label_3")
-        self.dateTextBox = QtWidgets.QTextEdit(self.centralwidget)
+        self.dateTextBox = QtWidgets.QLineEdit(self.centralwidget)
         self.dateTextBox.setEnabled(True)
         self.dateTextBox.setGeometry(QtCore.QRect(220, 130, 111, 21))
-        self.dateTextBox.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        #self.dateTextBox.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.dateTextBox.setObjectName("dateTextBox")
         #get date and disable date box
         self.dateTextBox.setDisabled(True)
@@ -1794,9 +1797,7 @@ class smmAddDP(object):
         self.currentDateLabel.setGeometry(QtCore.QRect(190, 160, 121, 20))
         self.currentDateLabel.setObjectName("currentDateLabel")
         self.currentDateLabel.setText(_translate("MainWindow", self.currentDateFormatted()))
-        
-        
-
+    
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setGeometry(QtCore.QRect(30, 200, 271, 31))
         self.pushButton.setObjectName("pushButton")#veiw graphs
@@ -1953,7 +1954,7 @@ class smmAddDP(object):
         self.label_3.setText(_translate("MainWindow", "Date ( MM/DD/YYYY) :"))
         
         self.pushButton.setText(_translate("MainWindow", "Add data point"))
-        self.pushButton_2.setText(_translate("MainWindow", "Veiw Graphs"))
+        self.pushButton_2.setText(_translate("MainWindow", "View Graphs"))
         self.label_4.setText(_translate("MainWindow", "Add Sink Data point"))
         self.quitToMenuButton.setText(_translate("MainWindow", "Return to menu"))
     
@@ -2356,11 +2357,11 @@ class sinkSettings(object):
         self.label_4.setText(_translate("MainWindow", "Sets the upper control limit target. Default = 100"))
         self.uclTargetLabel.setText(_translate("MainWindow", "100"))
         self.exportDataButton.setText(_translate("MainWindow", "Export Data"))
-        self.label_5.setText(_translate("MainWindow", "Export sinking data in .SSG format so that it can be reimported to the program elsewhere "))
+        self.label_5.setText(_translate("MainWindow", "Export sinking data in .SSG format so that it can be reimported to the program elsewhere. "))
         self.label_6.setText(_translate("MainWindow", "Import sinking data in .SSG format so that it can be used."))
         self.importDataButton.setText(_translate("MainWindow", "Import Data"))
         self.label_7.setText(_translate("MainWindow", "Resets all sinking data"))
-        self.resetDataButton.setText(_translate("MainWindow", "Reset all sinking Data"))
+        self.resetDataButton.setText(_translate("MainWindow", "Reset all Sinking Data"))
         self.returnToMenuButton.setText(_translate("MainWindow", "Return To Menu"))
         self.createBackupButton.setText(_translate("MainWindow", "Create a Data Backup"))
         self.label_8.setText(_translate("MainWindow", "Import sinking data in .SSG format so that it can be used."))
@@ -2689,7 +2690,7 @@ class sinkHelpMenu(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\"> </span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; text-decoration: underline;\">Viewing Graphs</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">To view graphs, navigate to the graph menu by clicking the button labeled &quot;view Graphs&quot;. A new window will load where you will be able to select the type of graph to view the data. The graphs have a scroll bar underneath them which allows the graph to be &quot;scrolled&quot;.</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">To view graphs, navigate to the graph menu by clicking the button labeled &quot;View Graphs&quot;. A new window will load where you will be able to select the type of graph to view the data. The graphs have a scroll bar underneath them which allows the graph to be &quot;scrolled&quot;.</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">There are three different types of graphs, a Sinking Percentage Line graph, a Distribution bar graph, and a Deviation plot.</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;\"><br /></p>\n"
